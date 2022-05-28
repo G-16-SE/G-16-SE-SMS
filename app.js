@@ -1,12 +1,24 @@
 require("dotenv").config();
 const express = require("express");
-const app = express();
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-require("./api/config/db").connect();
+const {connect} = require("./api/services/database/DB");
+
+//connect database services
+connect();
+
+const app = express();
 
 const userRoutes = require('./api/routes/user');
+const managerRoutes = require('./api/routes/manager');
 
+app.use(
+  cors({
+    credentials: true,
+    origin: 'http://'+process.env.HOST+':'+process.env.PORT
+  })
+);
 app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -27,6 +39,7 @@ app.use((req, res, next) => {
 
 // Routes which should handle requests
 app.use("/user", userRoutes);
+app.use("/manager", managerRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");

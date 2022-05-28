@@ -1,155 +1,250 @@
-const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require('crypto')
 
-const User = require("../models/User");
-const Manager = require("../models/Manager");
+const validator = require('../validation/user_details');
 
-exports.manager_signup = (req, res, next) => {
-    User.find({ email: req.body.email })
-      .exec()
-      .then(user => {
-        if (user.length >= 1) {
-          return res.status(409).json({
-            message: "Email exists"
+const User = require("../services/database/User");
+const Manager = require("../services/database/Manager");
+
+
+
+exports.manager_signup = async (req, res, next) => {
+
+    validation_result = validator.manager_signup(req);
+
+    if(validation_result.status){
+      return res.status(401).json({
+        message: validation_result.message
+      });
+    }
+
+    let result_email = await User.findByEmail(req.body.email);
+
+    if(!result_email.status){
+      return res.status(502).json({
+        message: "DB error"
+      });
+    }
+
+    if(result_email.values.length < 1){
+      bcrypt.hash(req.body.password, 10, async (err, hash) => {
+        if (err) {
+          return res.status(500).json({
+            message: err
           });
         } else {
-          bcrypt.hash(req.body.password, 10, (err, hash) => {
-            if (err) {
+          try{
+            user_id = this.generateUniqueID();
+            req.body.user_id = user_id;
+            req.body.hashPassword = hash;
+            let insert_result = await Manager.insertRecord(req);
+            if(insert_result.status){
+              return res.status(201).json({
+                message: "Insertion Success!"
+                });
+            }else {
               return res.status(500).json({
-                error: err
+                message: "Insertion Failed"
               });
-            } else {
-              const user = new User({
-                _id: new mongoose.Types.ObjectId(),
-                email: req.body.email,
-                password: hash,
-                role: req.body.role
-              });
-              user
-                .save()
-                .then(result_user => {
-                  console.log("User created");
-                  const manager = new Manager(
-                      {
-                        _id: new mongoose.Types.ObjectId(),
-                        user_id: result_user._id,
-                        name: req.body.name,
-                        contact: req.body.contactno,
-                        join_date: req.body.joineddate
-                      }
-                  );
-                  manager
-                  .save()
-                  .then(result_manager => {
-                    console.log("Manager created");
-                    res.status(201).json({
-                        message: "Insertion Success!"
-                    });
-
-                  })
-                  .catch(err => {
-                    console.log(err);
-                    res.status(500).json({
-                      error: err
-                    });
-                  })
-                })
-                .catch(err => {
-                  console.log(err);
-                  res.status(500).json({
-                    error: err
-                  });
-                });
             }
-          });
-        }
-      });
-};
-
-exports.admin_signup = (req, res, next) => {
-    User.find({ email: req.body.email })
-      .exec()
-      .then(user => {
-        if (user.length >= 1) {
-          return res.status(409).json({
-            message: "Email exists"
-          });
-        } else {
-          bcrypt.hash(req.body.password, 10, (err, hash) => {
-            if (err) {
-              return res.status(500).json({
-                error: err
-              });
-            } else {
-              const user = new User({
-                _id: new mongoose.Types.ObjectId(),
-                email: req.body.email,
-                password: hash,
-                role: req.body.role
-              });
-              user
-                .save()
-                .then(result_user => {
-                  console.log("User created");
-                  res.status(201).json({
-                    message: "Insertion Success!"
-                });
-                })
-                .catch(err => {
-                  console.log(err);
-                  res.status(500).json({
-                    error: err
-                  });
-                });
-            }
-          });
-        }
-      });
-};
-
-exports.user_login = (req, res, next) => {
-    User.find({ email: req.body.email })
-      .exec()
-      .then(user => {
-        if (user.length < 1) {
-          return res.status(401).json({
-            message: "User not exist!"
-          });
-        }
-        bcrypt.compare(req.body.password, user[0].password, (err, result) => {
-          if (err) {
-            return res.status(401).json({
-              message: "Auth failed"
+          }catch (err) {
+            return res.status(500).json({
+              message: err
             });
           }
-          if (result) {
-            const token = jwt.sign(
-              {
-                email: user[0].email,
-                userId: user[0]._id,
-                role: user[0].role
-              },
-              process.env.JWT_KEY,
-              {
-                expiresIn: '2h' // 2hrs
-              }
-            );
-            //res.cookie("jwt", token, { maxAge: 900000, httpOnly: true });
+          
+        }
+      });
+    }else {
+      return res.status(500).json({
+        message: "Email already exist"
+      });
+    }
+};
+
+exports.admin_signup = async(req, res, next) => {
+
+  let validation_result = validator.admin_signup(req);
+
+  if(validation_result.status){
+    return res.status(401).json({
+      message: validation_result.message
+    });
+  }
+
+  let result_email = await User.findByEmail(req.body.email);
+
+  if(!result_email.status){
+    return res.status(502).json({
+      message: "DB error"
+    });
+  }
+
+  if(result_email.values.length < 1){
+    bcrypt.hash(req.body.password, 10, async (err, hash) => {
+      if (err) {
+        return res.status(500).json({
+          message: err
+        });
+      } else {
+        try{
+          user_id = this.generateUniqueID();
+          req.body.user_id = user_id;
+          req.body.hashPassword = hash;
+          let insert_result = User.insertRecord(req);
+          if(insert_result.status){
+            
+            return res.status(201).json({
+              message: "Insertion Success!"
+              });
+          }else {
+            
+            return res.status(500).json({
+              message: "Insertion Failed"
+            });
+          }
+        }catch (err) {
+          
+          return res.status(500).json({
+            message: err
+          });
+        }
+        
+      }
+    });
+  }else {
+    return res.status(500).json({
+      message: "Email already exist"
+    });
+  }
+};
+
+exports.user_login = async(req, res, next) => {
+
+    validation_result = validator.login(res);
+
+    if(validation_result.status){
+      return res.status(401).json({
+        message: validation_result.message
+      });
+    }
+
+    let result_email = await User.findByEmail(req.body.email);
+
+    if(!result_email.status){
+      return res.status(502).json({
+        message: "DB error"
+      });
+    }
+
+    if(result_email.values.length > 0){
+      user = result_email.values[0];
+      bcrypt.compare(req.body.password, user[0].password, async (err, result) => {
+        if (err) {
+          return res.status(401).json({
+            message: "Auth failed"
+          });
+        }
+        if (result) {
+          const accesstoken = jwt.sign(
+            {
+              email: user.email,
+              userId: user.id,
+              role: user.role
+            },
+            process.env.ACCESS_TOKEN_KEY,
+            {
+              expiresIn: '30s' // 30s
+            }
+          );
+
+          const refreshtoekn = jwt.sign(
+            {
+              email: user.email,
+              userId: user.id,
+              role: user.role
+            },
+            process.env.ACCESS_TOKEN_KEY,
+            {
+              expiresIn: '6h' // 6 hours
+            }
+          );
+
+          let refreshtokenbuff = new Buffer(refreshtoekn);
+          let decodetoken = refreshtokenbuff.toString('base64');
+
+          let result_token = await User.updateToekn(user.id , decodetoken);
+
+          if(result_token.status){
+
+            res.cookie("accesstoken", accesstoken, { maxAge: 900000, httpOnly: true });
+            res.cookie("refreshtoken", refreshtoekn, { maxAge: 900000, httpOnly: true });
+
             return res.status(200).json({
               message: "Login successful",
-              token: token
-            });
-          }
-          res.status(401).json({
-            message: "Password is not matching"
+              accesstoken: accesstoken
           });
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json({
-          error: err
+
+          }else {
+            return res.status(401).json({
+              message: "token update error"
+          });
+
+          }
+        }
+        return res.status(401).json({
+          message: "Password is not matching"
         });
       });
+    }else {
+      return res.status(500).json({
+        message: "User not exist"
+      });
+    }
+};
+
+exports.admin_delete = async(req , res , next) => {
+  const id = req.params.id;
+
+  let result_manager = await Manager.findById(id);
+
+  if(result_manager.status){
+    if(result_manager.values.length > 0){
+      let result_delete = await User.deleteRecord(result_manager.values[0].user_id);
+
+      if(result_delete.status){
+        return res.status(201).json({
+          message: "Deletion Success!"
+          });
+      }else {
+        return res.status(502).json({
+          message: "DB error"
+        });
+      }
+
+    }else {
+      return res.status(401).json({
+        message: "Manager not found"
+      });
+    }
+  }else {
+    return res.status(502).json({
+      message: "DB error"
+    });
+  }
+};
+
+exports.user_logout = (req , res , next) => {
+  res.clearCookie('accesstoken');
+  res.clearCookie('refreshtoken');
+
+  return res.status(200).json({
+    message: "logout success!"
+  });
+
+};
+
+function generateUniqueID() {
+  return crypto.randomBytes(8).toString('hex')
 };
