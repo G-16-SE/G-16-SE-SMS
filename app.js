@@ -3,23 +3,23 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const {connect} = require("./api/services/database/DB");
+const { connect } = require("./api/services/database/DB");
 
 //connect database services
 connect();
 
 const app = express();
 
-const userRoutes = require('./api/routes/user');
-const managerRoutes = require('./api/routes/manager');
+const userRoutes = require("./api/routes/user");
+const managerRoutes = require("./api/routes/manager");
 
 app.use(
   cors({
     credentials: true,
-    origin: 'http://'+process.env.HOST+':'+process.env.PORT
+    origin: "http://" + process.env.HOST + ":" + process.env.PORT,
   })
 );
-app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -51,8 +51,8 @@ app.use((error, req, res, next) => {
   res.status(error.status || 500);
   res.json({
     error: {
-      message: error.message
-    }
+      message: error.message,
+    },
   });
 });
 
