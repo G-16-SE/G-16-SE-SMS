@@ -35,9 +35,10 @@ exports.manager_signup = async (req, res, next) => {
           });
         } else {
           try{
-            user_id = this.generateUniqueID();
+            user_id = generateUniqueID();
             req.body.user_id = user_id;
             req.body.hashPassword = hash;
+            req.body.role = 'Manager';
             let insert_result = await Manager.insertRecord(req);
             if(insert_result.status){
               return res.status(201).json({
@@ -85,29 +86,27 @@ exports.admin_signup = async(req, res, next) => {
     bcrypt.hash(req.body.password, 10, async (err, hash) => {
       if (err) {
         return res.status(500).json({
-          message: err
+          message: err.message
         });
       } else {
         try{
-          user_id = this.generateUniqueID();
+          const user_id = generateUniqueID();
           req.body.user_id = user_id;
           req.body.hashPassword = hash;
-          let insert_result = User.insertRecord(req);
+          req.body.role = 'Admin';
+          let insert_result = await User.insertRecord(req);
           if(insert_result.status){
-            
             return res.status(201).json({
               message: "Insertion Success!"
               });
           }else {
-            
             return res.status(500).json({
               message: "Insertion Failed"
             });
           }
         }catch (err) {
-          
           return res.status(500).json({
-            message: err
+            message: err.message
           });
         }
         
@@ -122,7 +121,7 @@ exports.admin_signup = async(req, res, next) => {
 
 exports.user_login = async(req, res, next) => {
 
-    validation_result = validator.login(res);
+    validation_result = validator.login(req);
 
     if(validation_result.status){
       return res.status(401).json({
@@ -140,7 +139,7 @@ exports.user_login = async(req, res, next) => {
 
     if(result_email.values.length > 0){
       user = result_email.values[0];
-      bcrypt.compare(req.body.password, user[0].password, async (err, result) => {
+      bcrypt.compare(req.body.password, user.password, async (err, result) => {
         if (err) {
           return res.status(401).json({
             message: "Auth failed"
@@ -172,9 +171,9 @@ exports.user_login = async(req, res, next) => {
           );
 
           let refreshtokenbuff = new Buffer(refreshtoekn);
-          let decodetoken = refreshtokenbuff.toString('base64');
+          let encodetoken = refreshtokenbuff.toString('base64');
 
-          let result_token = await User.updateToekn(user.id , decodetoken);
+          let result_token = await User.updateToken(user.id , encodetoken);
 
           if(result_token.status){
 
@@ -204,7 +203,7 @@ exports.user_login = async(req, res, next) => {
     }
 };
 
-exports.admin_delete = async(req , res , next) => {
+exports.manager_delete = async(req , res , next) => {
   const id = req.params.id;
 
   let result_manager = await Manager.findById(id);

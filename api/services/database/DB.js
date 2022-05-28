@@ -142,7 +142,6 @@ const select = (sql , params) => new Promise((resolve, reject) => {
                 resolve(res);
                    
             }
-            console.log("selection return value")
             res.values = results;
 
             resolve(res);

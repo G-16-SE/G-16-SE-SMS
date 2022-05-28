@@ -3,6 +3,7 @@ const User = require("../../services/database/User");
 
 module.exports = async (req, res, next) => {
     try {
+        console.log(req.cookies)
         const accesstoken = req.cookies.accesstoken;
         const refreshtoken = req.cookies.refreshtoken;
 
@@ -10,8 +11,7 @@ module.exports = async (req, res, next) => {
             jwt.verify(accesstoken, process.env.ACCESS_TOKEN_KEY , (err , decodedaccesstoken) => {
                 if(err){
 
-                    if(decoderefreshtoken){
-                        const refreshtoken = new Buffer(decoderefreshtoken, 'base64').toString('ascii');
+                    if(refreshtoken){
 
                         jwt.verify(refreshtoken, process.env.REFRESH_TOKEN_KEY , async(err , decodedrefreshtoken) => {
                             if(err){
@@ -25,6 +25,8 @@ module.exports = async (req, res, next) => {
                                     if(result_user.values.length > 0 && result_user.values[0].token){
                                         const savedrefreshtoken = new Buffer(result_user.values[0].token, 'base64').toString('ascii');
                                         if(savedrefreshtoken == refreshtoken){
+
+                                            const user = result_user.values[0];
 
                                             const newaccesstoken = jwt.sign(
                                                 {
@@ -51,9 +53,9 @@ module.exports = async (req, res, next) => {
                                               );
                                     
                                               let refreshtokenbuff = new Buffer(newrefreshtoekn);
-                                              let decodetoken = refreshtokenbuff.toString('base64');
+                                              let encodetoken = refreshtokenbuff.toString('base64');
                                     
-                                              let result_token = await User.updateToekn(user.id , decodetoken);
+                                              let result_token = await User.updateToken(user.id , encodetoken);
 
                                               if(result_token.status){
 
@@ -101,8 +103,7 @@ module.exports = async (req, res, next) => {
                 }
             });
         }else {
-            if(decoderefreshtoken){
-                const refreshtoken = new Buffer(decoderefreshtoken, 'base64').toString('ascii');
+            if(refreshtoken){
 
                 jwt.verify(refreshtoken, process.env.REFRESH_TOKEN_KEY , async(err , decodedrefreshtoken) => {
                     if(err){
@@ -116,6 +117,8 @@ module.exports = async (req, res, next) => {
                             if(result_user.values.length > 0 && result_user.values[0].token){
                                 const savedrefreshtoken = new Buffer(result_user.values[0].token, 'base64').toString('ascii');
                                 if(savedrefreshtoken == refreshtoken){
+
+                                    const user = result_user.values[0];
 
                                     const newaccesstoken = jwt.sign(
                                         {
@@ -144,7 +147,7 @@ module.exports = async (req, res, next) => {
                                       let refreshtokenbuff = new Buffer(newrefreshtoekn);
                                       let decodetoken = refreshtokenbuff.toString('base64');
                             
-                                      let result_token = await User.updateToekn(user.id , decodetoken);
+                                      let result_token = await User.updateToken(user.id , decodetoken);
 
                                       if(result_token.status){
 

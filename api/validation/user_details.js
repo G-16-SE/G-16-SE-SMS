@@ -214,6 +214,7 @@ exports.login = (req) => {
             
         }
     } catch (error) {
+        console.log(error.message)
         result.message ='Input validation failed';
         result.status = true;
         return result;

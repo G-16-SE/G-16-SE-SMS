@@ -23,7 +23,7 @@ const insertRecord = async (req) => {
     return res;
 }
 
-const updateToekn = async (user_id , token) => {
+const updateToken = async (user_id , token) => {
     sql = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
     params = ['user', 'token' , token  , 'id' , user_id];
     const res = await update(sql, params);
@@ -39,5 +39,5 @@ const deleteRecord = async (user_id) => {
 
 
 module.exports = {
-    findById , findByEmail , insertRecord
+    findById , findByEmail , insertRecord , updateToken , deleteRecord
 };
