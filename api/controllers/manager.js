@@ -2,12 +2,19 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-const validator = require("../validation/user_details");
+const validator = require("../validation/user_inputs");
 
 const User = require("../services/database/User");
 const Manager = require("../services/database/Manager");
 
 exports.manager_update = async (req, res, next) => {
+
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied"
+    })
+  }
+  
   validation_result = validator.manager_uodate(req);
 
   if (validation_result.status) {

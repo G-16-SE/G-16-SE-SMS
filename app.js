@@ -3,15 +3,19 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const { connect } = require("./api/services/database/DB");
 
-//connect database services
-connect();
+//const { exec } = require("./api/services/database/Tables");
+
+
+//create tables
+//let tables = exec();
 
 const app = express();
 
 const userRoutes = require("./api/routes/user");
 const managerRoutes = require("./api/routes/manager");
+const { supplierRouter } = require("./api/routes/supplier");
+const { supplyRecordRouter } = require("./api/routes/supplyRecord");
 
 app.use(
   cors({
@@ -40,6 +44,8 @@ app.use((req, res, next) => {
 // Routes which should handle requests
 app.use("/user", userRoutes);
 app.use("/manager", managerRoutes);
+app.use("/supplier", supplierRouter);
+app.use("/supplyRecord", supplyRecordRouter);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");
@@ -56,4 +62,6 @@ app.use((error, req, res, next) => {
   });
 });
 
-module.exports = app;
+module.exports = {
+  app
+};

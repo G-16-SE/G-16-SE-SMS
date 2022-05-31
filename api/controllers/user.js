@@ -2,12 +2,19 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-const validator = require("../validation/user_details");
+const validator = require("../validation/user_inputs");
 
 const User = require("../services/database/User");
 const Manager = require("../services/database/Manager");
 
 exports.manager_signup = async (req, res, next) => {
+
+  if(req.role !== "Admin"){
+    return res.status(401).json({
+      message: "Access Denied"
+    })
+  }
+
   const validation_result = validator.manager_signup(req);
 
   if (validation_result.status) {
@@ -61,6 +68,8 @@ exports.manager_signup = async (req, res, next) => {
 };
 
 exports.admin_signup = async (req, res, next) => {
+
+
   const validation_result = validator.admin_signup(req);
 
   if (validation_result.status) {
@@ -200,6 +209,13 @@ exports.user_login = async (req, res, next) => {
 };
 
 exports.manager_delete = async (req, res, next) => {
+
+  if(req.role !== "Admin"){
+    return res.status(401).json({
+      message: "Access Denied"
+    })
+  }
+
   const id = req.params.id;
 
   let result_manager = await Manager.findById(id);

@@ -1,4 +1,4 @@
-const { insert, insertUser, select } = require("./DB");
+const { insert, insertWithTransaction, select , updateWithTransaction } = require("./DB");
 
 const insertRecord = async (req) => {
   sql1 = "INSERT INTO ?? (??, ??, ??, ??) VALUES (? , ?, ? , ?)";
@@ -27,7 +27,7 @@ const insertRecord = async (req) => {
     req.body.joineddate,
   ];
 
-  const res = await insertUser(sql1, sql2, params1, params2);
+  let res = await insertWithTransaction(sql1, sql2, params1, params2);
   return res;
 };
 
@@ -75,7 +75,7 @@ const updateRecord = async (req) => {
     ];
   }
 
-  const res = await updateUser(sql1, sql2, params1, params2);
+  let res = await updateWithTransaction(sql1, sql2, params1, params2);
   return res;
 };
 
