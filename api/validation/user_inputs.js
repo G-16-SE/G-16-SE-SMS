@@ -9,8 +9,6 @@ exports.manager_signup = (req) => {
   try {
     const {
       email,
-      password,
-      repassword,
       name,
       contactno,
       joineddate,
@@ -18,7 +16,6 @@ exports.manager_signup = (req) => {
 
     if (
       validator.isEmpty(email) ||
-      validator.isEmpty(password) ||
       validator.isEmpty(name) ||
       validator.isEmpty(contactno) ||
       validator.isEmpty(joineddate)
@@ -32,24 +29,14 @@ exports.manager_signup = (req) => {
       result.status = true;
       return result;
     }
-    if (password !== repassword) {
-      result.message = "Passwords not matching";
-      result.status = true;
-      return result;
-    }
-    if (!validator.isAlpha(name)) {
+    if (!validator.isAlpha(name.replace(" ", "s"))) {
       result.message = "Name only needs alpha characters";
-      result.status = true;
-      return result;
-    }
-    if (!validator.isLength(password, { min: 6 })) {
-      result.message = "Password must be at least 6 letters";
       result.status = true;
       return result;
     }
     if (
       !validator.isNumeric(contactno) &&
-      !validator.isLength(password, { min: 10, max: 10 })
+      !validator.isLength(contactno, { min: 10, max: 10 })
     ) {
       result.message = "Invalid Contact Number";
       result.status = true;
@@ -100,24 +87,24 @@ exports.manager_update = (req) => {
       result.status = true;
       return result;
     }
-    if (password !== repassword) {
+    if (password && password !== repassword) {
       result.message = "Passwords not matching";
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name)) {
+    if (!validator.isAlpha(name.replace(" ", "s"))) {
       result.message = "Name only needs alpha characters";
       result.status = true;
       return result;
     }
-    if (!validator.isLength(password, { min: 6 })) {
+    if (password && !validator.isLength(password, { min: 6 })) {
       result.message = "Password must be at least 6 letters";
       result.status = true;
       return result;
     }
     if (
       !validator.isNumeric(contactno) &&
-      !validator.isLength(password, { min: 10, max: 10 })
+      !validator.isLength(contactno, { min: 10, max: 10 })
     ) {
       result.message = "Invalid Contact Number";
       result.status = true;
@@ -129,6 +116,7 @@ exports.manager_update = (req) => {
       return result;
     }
   } catch (error) {
+    console.error(error.stack);
     result.message = "Input validation failed";
     result.status = true;
     return result;
@@ -244,8 +232,8 @@ exports.supplier_insert = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
-      result.message = "Name only needs alpha characters";
+    if (!validator.isAlpha(name.replace(" ", "s")) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
+      result.message = "Name , city and district only needs alpha characters";
       result.status = true;
       return result;
     }
@@ -303,7 +291,7 @@ exports.supplier_update = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
+    if (!validator.isAlpha(name.replace(" ", "s")) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
       result.message = "Name only needs alpha characters";
       result.status = true;
       return result;
@@ -345,7 +333,7 @@ exports.nameInput = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name)) {
+    if (!validator.isAlpha(name.replace(" ", "s"))) {
       result.message = "Name only needs alpha characters";
       result.status = true;
       return result;

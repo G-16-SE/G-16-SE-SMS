@@ -3,7 +3,6 @@ const User = require("../../services/database/User");
 
 module.exports = async (req, res, next) => {
   try {
-    console.log(req.cookies);
     const accesstoken = req.cookies.accesstoken;
     const refreshtoken = req.cookies.refreshtoken;
 
@@ -64,7 +63,7 @@ module.exports = async (req, res, next) => {
                           );
 
                           let refreshtokenbuff = new Buffer.from(
-                            refreshtoekn,
+                            newrefreshtoekn,
                             "utf8"
                           );
                           let encodetoken = refreshtokenbuff.toString("base64");
@@ -94,11 +93,13 @@ module.exports = async (req, res, next) => {
                             });
                           }
                         } else {
+                          console.log("1");
                           return res.status(401).json({
-                            message: "User not found",
+                            message: "Auth failed",
                           });
                         }
                       } else {
+                        console.log("2");
                         return res.status(401).json({
                           message: "User not found",
                         });
@@ -117,6 +118,7 @@ module.exports = async (req, res, next) => {
               });
             }
           } else {
+            
             req.user_id = decodedaccesstoken.userId;
             req.role = decodedaccesstoken.role;
             next();

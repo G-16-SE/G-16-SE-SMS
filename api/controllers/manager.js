@@ -15,7 +15,7 @@ exports.manager_update = async (req, res, next) => {
     })
   }
   
-  validation_result = validator.manager_uodate(req);
+  const validation_result = validator.manager_update(req);
 
   if (validation_result.status) {
     return res.status(401).json({
@@ -27,28 +27,28 @@ exports.manager_update = async (req, res, next) => {
 
   if (!result_email.status) {
     return res.status(502).json({
-      message: "DB error",
+      message: "Email find failed",
     });
   }
 
   const email_condition =
     (result_email.values.length > 0 &&
-      result_email.values[0].id == req.user.id) ||
+      result_email.values[0].email == req.body.email) ||
     result_email.values.length < 1;
 
   if (email_condition) {
-    if (req.body.password != "") {
+    if (req.body.password && req.body.password != "") {
       bcrypt.hash(req.body.password, 10, async (err, hash) => {
         if (err) {
           return res.status(500).json({
-            message: err,
+            message: err.message,
           });
         } else {
           try {
-            req.body.user_id = result_email.values[0].user_id;
+            req.body.user_id = req.user_id;
             req.body.hashPassword = hash;
-            let insert_result = await Manager.insertRecord(req);
-            if (insert_result.status) {
+            let update_result = await Manager.updateRecord(req);
+            if (update_result.status) {
               return res.status(201).json({
                 message: "Updation Success!",
               });
@@ -66,10 +66,9 @@ exports.manager_update = async (req, res, next) => {
       });
     } else {
       try {
-        req.body.user_id = result_email.values[0].user_id;
-        req.body.user_id = user_id;
-        let insert_result = await Manager.updateRecord(req);
-        if (insert_result.status) {
+        req.body.user_id = req.user_id;
+        let update_result = await Manager.updateRecord(req);
+        if (update_result.status) {
           return res.status(201).json({
             message: "Updation Success!",
           });
@@ -85,7 +84,7 @@ exports.manager_update = async (req, res, next) => {
       }
     }
   } else {
-    return res.status(500).json({
+    return res.status(401).json({
       message: "Email already exist",
     });
   }

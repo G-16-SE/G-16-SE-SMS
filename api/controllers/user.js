@@ -32,6 +32,7 @@ exports.manager_signup = async (req, res, next) => {
   }
 
   if (result_email.values.length < 1) {
+    req.body.password = "123456789";
     bcrypt.hash(req.body.password, 10, async (err, hash) => {
       if (err) {
         return res.status(500).json({
@@ -242,7 +243,7 @@ exports.manager_delete = async (req, res, next) => {
     }
   } else {
     return res.status(502).json({
-      message: "DB error",
+      message: "Manager find failed",
     });
   }
 };

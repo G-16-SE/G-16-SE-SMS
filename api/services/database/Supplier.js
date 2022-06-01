@@ -19,18 +19,16 @@ const insertRecord = async (req) => {
         req.body.postal_code
       ];
 
-    sql2 = "INSERT INTO ?? (??, ??, ??, ?? , ??) VALUES (? , ?, ? , ? , ?)";
+    sql2 = "INSERT INTO ?? (??, ??, ??, ?? ) VALUES (? , ?, ? , ? )";
     params2 = [
       "supplier",
       "name",
       "email",
       "Joined_date",
-      "photo",
       "address_id",
       req.body.name,
       req.body.email,
       req.body.joineddate,
-      req.body.photo,
       req.body.addressId
     ];
   
@@ -53,10 +51,11 @@ const updateRecord = async (req) => {
         req.body.district,
         "postal_code",
         req.body.postal_code,
+        "id",
         req.body.addressId
       ];
 
-    sql2 = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
+    sql2 = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
     params2 = [
       "supplier",
       "name",
@@ -65,8 +64,6 @@ const updateRecord = async (req) => {
       req.body.email,
       "Joined_date",
       req.body.joineddate,
-      "photo",
-      req.body.photo,
       "id",
       req.body.id
     ];
@@ -76,22 +73,22 @@ const updateRecord = async (req) => {
 };
 
 const findByName = async (name) => {
-    sql = "SELECT * FROM ?? INNER JOIN ?? ON ??.?? = ??.??  WHERE ??.?? LIKE ?";
-    params = ["supplier", "address" , "supplier", "address_id" , "address", "id" , "supplier" , "name", name];
+    sql = "SELECT ??.* , ??.?? , ??.?? , ??.?? , ??.?? , ??.?? FROM ?? INNER JOIN ?? ON ??.?? = ??.??  WHERE ??.?? LIKE ?";
+    params = ["supplier", "address" , "lane1" , "address" , "lane2" ,"address" , "city" ,"address" , "district" , "address" , "postal_code" , "supplier", "address" , "supplier" , "address_id" , "address", "id" , "supplier" , "name", name];
     let res = await select(sql, params);
     return res;
 };
 
 const findById = async (id) => {
-    sql = "SELECT * FROM ?? INNER JOIN ?? ON ??.?? = ??.??  WHERE ??.?? = ?";
-    params = ["supplier", "address" , "supplier", "address_id" , "address", "id" , "supplier" , "id", id];
+    sql = "SELECT ??.* , ??.?? , ??.?? , ??.?? , ??.?? , ??.?? FROM ?? INNER JOIN ?? ON ??.?? = ??.??  WHERE ??.?? = ?";
+    params = ["supplier", "address" , "lane1" , "address" , "lane2" ,"address" , "city" ,"address" , "district" , "address" , "postal_code" , "supplier", "address" , "supplier" , "address_id" , "address", "id" , "supplier" , "id", id];
     let res = await select(sql, params);
     return res;
 };
 
 const findAll = async () => {
-    sql = "SELECT * FROM ?? INNER JOIN ?? ON ??.?? = ??.??";
-    params = ["supplier", "address" , "supplier", "address_id" , "address", "id"];
+    sql = "SELECT ??.* , ??.?? , ??.?? , ??.?? , ??.?? , ??.?? FROM ?? INNER JOIN ?? ON ??.?? = ??.??";
+    params = ["supplier", "address" , "lane1" , "address" , "lane2" ,"address" , "city" ,"address" , "district" , "address" , "postal_code" , "supplier", "address" , "supplier" , "address_id" , "address", "id"];
     let res = await select(sql, params);
     return res;
 };

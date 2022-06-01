@@ -1,4 +1,4 @@
-const { insert, update, select } = require("./DB");
+const { insert, update, select , remove } = require("./DB");
 
 const findByEmail = async (email) => {
   sql = "SELECT * FROM ?? WHERE ?? = ?";

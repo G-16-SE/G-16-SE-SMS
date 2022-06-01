@@ -11,8 +11,4 @@ router.get("/all", checkAuth , SupplyRecordController.getSupplyRecords);
 router.patch("/edit/:id", checkAuth , SupplyRecordController.editSupplyRecord);
 router.delete("/remove/:id", checkAuth , SupplyRecordController.deleteSupplyRecordrByID);
 
-
-
-
-
 module.exports.supplyRecordRouter = router;
