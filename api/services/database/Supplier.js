@@ -90,11 +90,12 @@ const findById = async (id) => {
 };
 
 const findAll = async () => {
-    sql = "SELECT * FROM ?? INNER JOIN ?? ON ??.?? = ??.??";
-    params = ["supplier", "address" , "supplier", "address_id" , "address", "id"];
-    let res = await select(sql, params);
-    return res;
+  sql = "SELECT ??.* , ??.?? , ??.?? , ??.?? , ??.?? , ??.?? FROM ?? INNER JOIN ?? ON ??.?? = ??.??";
+  params = ["supplier", "address" , "lane1" , "address" , "lane2" ,"address" , "city" ,"address" , "district" , "address" , "postal_code" , "supplier", "address" , "supplier" , "address_id" , "address", "id"];
+  let res = await select(sql, params);
+  return res;
 };
+
 
 const deleteRecord = async (id1 , id2) => {
 

@@ -210,11 +210,11 @@ exports.user_login = async (req, res, next) => {
 
 exports.manager_delete = async (req, res, next) => {
 
-  if(req.role !== "Admin"){
-    return res.status(401).json({
-      message: "Access Denied"
-    })
-  }
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
 
   const id = req.params.id;
 
