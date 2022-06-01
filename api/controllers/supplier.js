@@ -1,3 +1,5 @@
+const crypto = require("crypto");
+
 const Supplier = require("../services/database/Supplier");
 const Address = require("../services/database/Address");
 
@@ -135,7 +137,7 @@ exports.deleteSupplierById = async (req , res , next) => {
   
   let result_delete_supplier = await Supplier.deleteRecord(supplier.address_id , supplier.id);
 
-  if(!result_delete_supplier){
+  if(!result_delete_supplier.status){
     return res.status(500).json({
       message: "Delete Failed",
     });
@@ -162,7 +164,7 @@ exports.editSupplier = async (req , res , next) => {
     });
   }
 
-  let result_supplier = await Supplier.findById(req.body.id);
+  let result_supplier = await Supplier.findById(req.params.id);
 
   if(!result_supplier.status){
     return res.status(500).json({
@@ -177,6 +179,7 @@ exports.editSupplier = async (req , res , next) => {
   }
 
   req.body.addressId = result_supplier.values[0].address_id;
+  req.body.id = req.params.id;
 
   let result_update = await Supplier.updateRecord(req);
 

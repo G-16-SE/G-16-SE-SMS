@@ -37,7 +37,7 @@ const updateRecord = async (req) => {
   params1 = [];
   params2 = [];
 
-  if (req.body.password != "") {
+  if (req.body.password == "") {
     sql1 = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
     params1 = ["user", "email", req.body.email, "id", req.body.user_id];
 
@@ -50,6 +50,8 @@ const updateRecord = async (req) => {
       req.body.contactno,
       "join_date",
       req.body.joineddate,
+      "user_id",
+      req.body.user_id
     ];
   } else {
     sql1 = "UPDATE ?? SET ?? = ? , ?? = ? WHERE ?? = ?";
@@ -58,7 +60,7 @@ const updateRecord = async (req) => {
       "email",
       req.body.email,
       "password",
-      req.body.password,
+      req.body.hashPassword,
       "id",
       req.body.user_id,
     ];
@@ -72,6 +74,8 @@ const updateRecord = async (req) => {
       req.body.contactno,
       "join_date",
       req.body.joineddate,
+      "user_id",
+      req.body.user_id
     ];
   }
 
@@ -79,7 +83,15 @@ const updateRecord = async (req) => {
   return res;
 };
 
+const findById = async (id) => {
+  sql = "SELECT * FROM ?? WHERE ?? = ?";
+  params = ["manager", "id", id];
+  const res = await select(sql, params);
+  return res;
+};
+
 module.exports = {
   insertRecord,
   updateRecord,
+  findById
 };

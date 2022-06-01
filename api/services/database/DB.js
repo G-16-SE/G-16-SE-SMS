@@ -75,26 +75,29 @@ const insertWithTransaction = (sql1, sql2, params1, params2) =>
 
       connection.beginTransaction(function (err) {
         if (err) {
-          console.error(error.message);
+          console.error(err.message);
           res.status = false;
           resolve(res);
+          return;
         }
-        connection.query(sql1, function (error, results, fields) {
-          if (error) {
+        connection.query(sql1, function (error1, results1, fields1) {
+          if (error1) {
             connection.rollback();
-            console.error(error.message);
+            console.error(error1.message);
             res.status = false;
             resolve(res);
+            return;
           }
 
-          var user_id = results.insertId;
+          var user_id = results1.insertId;
 
-          connection.query(sql2, function (error, results, fields) {
-            if (error) {
+          connection.query(sql2, function (error2, results2, fields2) {
+            if (error2) {
               connection.rollback();
-              console.error(error.message);
+              console.error(error2.message);
               res.status = false;
               resolve(res);
+              return;
             }
             connection.commit(function (err) {
               if (err) {
@@ -102,8 +105,9 @@ const insertWithTransaction = (sql1, sql2, params1, params2) =>
                 console.error(error.message);
                 res.status = false;
                 resolve(res);
+                return;
               }
-              console.log("user insertion success!");
+              console.log("insertion success!");
               resolve(res);
             });
           });
@@ -156,23 +160,24 @@ const updateWithTransaction = (sql1, sql2, params1, params2) =>
           console.error(error.message);
           res.status = false;
           resolve(res);
+          return;
         }
-        connection.query(sql1, function (error, results, fields) {
-          if (error) {
+        connection.query(sql1, function (error1, results1, fields) {
+          if (error1) {
             connection.rollback();
-            console.error(error.message);
+            console.error(error1.message);
             res.status = false;
             resolve(res);
+            return;
           }
 
-          var user_id = results.insertId;
-
-          connection.query(sql2, function (error, results, fields) {
-            if (error) {
+          connection.query(sql2, function (error2, results2, fields) {
+            if (error2) {
               connection.rollback();
-              console.error(error.message);
+              console.error(error2.message);
               res.status = false;
               resolve(res);
+              return;
             }
             connection.commit(function (err) {
               if (err) {
@@ -180,8 +185,9 @@ const updateWithTransaction = (sql1, sql2, params1, params2) =>
                 console.error(error.message);
                 res.status = false;
                 resolve(res);
+                return;
               }
-              console.log("user insertion success!");
+              console.log("updation success!");
               resolve(res);
             });
           });
@@ -257,37 +263,41 @@ const removeWithTransaction = (sql1, sql2, params1, params2) =>
       sql1 = mysql.format(sql1, params1);
       sql2 = mysql.format(sql2, params2);
 
+      console.log(sql1 , sql2);
+
       connection.beginTransaction(function (err) {
         if (err) {
-          console.error(error.message);
+          console.error(err.message);
           res.status = false;
           resolve(res);
+          return;
         }
-        connection.query(sql1, function (error, results, fields) {
-          if (error) {
+        connection.query(sql1, function (error1, results1, fields1) {
+          if (error1) {
             connection.rollback();
-            console.error(error.message);
+            console.error(error1.message);
             res.status = false;
             resolve(res);
+            return;
           }
 
-          var user_id = results.insertId;
-
-          connection.query(sql2, function (error, results, fields) {
-            if (error) {
+          connection.query(sql2, function (error2, results2, fields2) {
+            if (error2) {
               connection.rollback();
-              console.error(error.message);
+              console.error(error2.message);
               res.status = false;
               resolve(res);
+              return;
             }
             connection.commit(function (err) {
               if (err) {
                 connection.rollback();
-                console.error(error.message);
+                console.error(err.message);
                 res.status = false;
                 resolve(res);
+                return;
               }
-              console.log("user insertion success!");
+              console.log("deletion success!");
               resolve(res);
             });
           });
