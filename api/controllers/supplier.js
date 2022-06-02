@@ -153,8 +153,9 @@ exports.editSupplier = async (req , res , next) => {
   //     message: "Access Denied"
   //   })
   // }
+  console.log(req)
 
-  const validation_result = validator.supplier_update(req);
+  // const validation_result = validator.supplier_update(req);
 
   if(validation_result.status){
     return res.status(401).json({

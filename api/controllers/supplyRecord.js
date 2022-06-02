@@ -186,7 +186,7 @@ exports.editSupplyRecord = async(req, res) => {
   //   })
   // }
 
-  const validation_result = validator.supplyrecord_update(req);
+  //const validation_result = validator.supplyrecord_update(req);
 
   if(validation_result.status){
     return res.status(401).json({
