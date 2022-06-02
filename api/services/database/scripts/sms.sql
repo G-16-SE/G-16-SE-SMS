@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 31, 2022 at 08:45 AM
+-- Generation Time: Jun 02, 2022 at 10:07 AM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -24,23 +24,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `address`
---
-
-DROP TABLE IF EXISTS `address`;
-CREATE TABLE IF NOT EXISTS `address` (
-  `id` varchar(255) NOT NULL,
-  `lane1` varchar(255) NOT NULL,
-  `lane2` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `district` varchar(255) NOT NULL,
-  `postal_code` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `manager`
 --
 
@@ -53,7 +36,11 @@ CREATE TABLE IF NOT EXISTS `manager` (
   `join_date` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `manager`
+--
 
 
 -- --------------------------------------------------------
@@ -83,10 +70,10 @@ CREATE TABLE IF NOT EXISTS `supplier` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `contact` varchar(10) NOT NULL,
+  `address` text NOT NULL,
   `joined_date` date NOT NULL,
-  `address_id` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `address_id` (`address_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -125,6 +112,13 @@ CREATE TABLE IF NOT EXISTS `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `email`, `password`, `role`, `token`) VALUES
+('10ce9f006bd8f251', 'www@gmail.com', '$2b$10$2sHJaV2c9DNFmR/t16Sz/uZypcjW61.cye3R6hqsGPFWF4YdZWH/i', 'Admin', 'ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmxiV0ZwYkNJNkluZDNkMEJuYldGcGJDNWpiMjBpTENKMWMyVnlTV1FpT2lJeE1HTmxPV1l3TURaaVpEaG1NalV4SWl3aWNtOXNaU0k2SWtGa2JXbHVJaXdpYVdGMElqb3hOalUwTURrMU5qY3hMQ0psZUhBaU9qRTJOVFF4TVRjeU56RjkuV3dYZXU4SXJ6UjFnNlFFQ3lGZXF2X2ZPdTNLXzN5b1kzV29pa2MxRHdzRQ==');
+
+--
 -- Constraints for dumped tables
 --
 
@@ -135,26 +129,10 @@ ALTER TABLE `manager`
   ADD CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `supplier`
---
-ALTER TABLE `supplier`
-  ADD CONSTRAINT `address_id` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
 -- Constraints for table `supply_record`
 --
 ALTER TABLE `supply_record`
   ADD CONSTRAINT `supplier_id` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Dumping data for table `user`
---
-
-INSERT INTO `user` (`id`, `email`, `password`, `role`, `token`) VALUES
-('10ce9f006bd8f251', 'www@gmail.com', '$2b$10$2sHJaV2c9DNFmR/t16Sz/uZypcjW61.cye3R6hqsGPFWF4YdZWH/i', 'Admin', 'ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmxiV0ZwYkNJNkluZDNkMEJuYldGcGJDNWpiMjBpTENKMWMyVnlTV1FpT2lJeE1HTmxPV1l3TURaaVpEaG1NalV4SWl3aWNtOXNaU0k2SWtGa2JXbHVJaXdpYVdGMElqb3hOalV6TnpRME1qWTVMQ0psZUhBaU9qRTJOVE0zTmpVNE5qbDkuRXVhR3hVSVRkaUF3YVM4ZmpNSjZCODRfeURqT0dSMVVjc1dnNEloeFNlYw=='),
-('aa61f8953fd5b501', 'www1@gmail.com', '$2b$10$IM9mqjbIerMk2Zpa/ze0l.NfixrVHPreS3sssArM1Vh9dd6mj2Eu6', 'Admin', 'ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmxiV0ZwYkNJNkluZDNkekZBWjIxaGFXd3VZMjl0SWl3aWRYTmxja2xrSWpvaVlXRTJNV1k0T1RVelptUTFZalV3TVNJc0luSnZiR1VpT2lKQlpHMXBiaUlzSW1saGRDSTZNVFkxTXpjME5ERTFPQ3dpWlhod0lqb3hOalV6TnpZMU56VTRmUS5FWlJOM3RaOHhVd3dPOVN3b3hDMndscFZZUjk1a1lDVUEtU3VlNF9yZGdF'),
-('wwewewe', 'www3@gmail.com', '123456789', 'Manager', NULL);
-
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
