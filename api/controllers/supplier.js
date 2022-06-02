@@ -20,8 +20,6 @@ exports.addSupplier = async(req, res , next) => {
     });
   }
 
-  req.body.addressId = generateUniqueID();
-
   let result_suplier = await Supplier.insertRecord(req);
 
   if(!result_suplier.status){
@@ -135,7 +133,7 @@ exports.deleteSupplierById = async (req , res , next) => {
 
   const supplier = result_supplier.values[0];
   
-  let result_delete_supplier = await Supplier.deleteRecord(supplier.address_id , supplier.id);
+  let result_delete_supplier = await Supplier.deleteRecord(supplier.id);
 
   if(!result_delete_supplier.status){
     return res.status(500).json({
@@ -178,7 +176,6 @@ exports.editSupplier = async (req , res , next) => {
     })
   }
 
-  req.body.addressId = result_supplier.values[0].address_id;
   req.body.id = req.params.id;
 
   let result_update = await Supplier.updateRecord(req);
