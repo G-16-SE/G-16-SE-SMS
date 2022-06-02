@@ -63,7 +63,7 @@ exports.getSupplierByName = async (req , res , next) => {
 
   return res.status(201).json({
     message: "Search Success!",
-    data: res.values
+    data: result_search.values
   });
 
 };
@@ -85,7 +85,7 @@ exports.getSupplierById = async (req , res , next) => {
 
   return res.status(201).json({
     message: "Search Success!",
-    data: res.values
+    data: result_search.values
   });
 
 };
@@ -107,7 +107,7 @@ exports.getSuppliers = async (req , res , next) => {
 
   return res.status(201).json({
     message: "Search Success!",
-    data: res.values
+    data: result_search.values
   });
 
 };
