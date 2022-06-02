@@ -208,6 +208,123 @@ exports.supplier_insert = (req) => {
       email,
       name,
       joineddate,
+      address,
+      contact
+    } = req.body;
+
+    if (
+      validator.isEmpty(email) ||
+      validator.isEmpty(name) ||
+      validator.isEmpty(contact) ||
+      validator.isEmpty(address) ||
+      validator.isEmpty(joineddate)
+    ) {
+      result.message = "Input can't be empty";
+      result.status = true;
+      return result;
+    }
+    if (!validator.isEmail(email)) {
+      result.message = "Invalid Email Format";
+      result.status = true;
+      return result;
+    }
+    if (!validator.isAlpha(name.replace(" ", "s"))) {
+      result.message = "Name only needs characters";
+      result.status = true;
+      return result;
+    }
+    if (
+      !validator.isNumeric(contact) &&
+      !validator.isLength(contact, { min: 10, max: 10 })
+    ) {
+      result.message = "Invalid Contact Number";
+      result.status = true;
+      return result;
+    }
+    if (!validator.isDate(joineddate)) {
+      result.message = "Invalid Date";
+      result.status = true;
+      return result;
+    }
+  } catch (error) {
+    result.message = "Input validation failed";
+    result.status = true;
+    return result;
+  } finally {
+    return result;
+  }
+};
+
+exports.supplier_update = (req) => {
+  result = {
+    message: "",
+    status: false,
+  };
+
+  try {
+    const {
+      email,
+      name,
+      joineddate,
+      address,
+      contact
+    } = req.body;
+
+    if (
+      validator.isEmpty(email) ||
+      validator.isEmpty(name) ||
+      validator.isEmpty(contact) ||
+      validator.isEmpty(address) ||
+      validator.isEmpty(joineddate)
+    ) {
+      result.message = "Input can't be empty";
+      result.status = true;
+      return result;
+    }
+    if (!validator.isEmail(email)) {
+      result.message = "Invalid Email Format";
+      result.status = true;
+      return result;
+    }
+    if (!validator.isAlpha(name.replace(" ", "s"))) {
+      result.message = "Name only needs characters";
+      result.status = true;
+      return result;
+    }
+    if (
+      !validator.isNumeric(contact) &&
+      !validator.isLength(contact, { min: 10, max: 10 })
+    ) {
+      result.message = "Invalid Contact Number";
+      result.status = true;
+      return result;
+    }
+    if (!validator.isDate(joineddate)) {
+      result.message = "Invalid Date";
+      result.status = true;
+      return result;
+    }
+  } catch (error) {
+    result.message = "Input validation failed";
+    result.status = true;
+    return result;
+  } finally {
+    return result;
+  }
+};
+
+
+/* exports.supplier_insert = (req) => {
+  result = {
+    message: "",
+    status: false,
+  };
+
+  try {
+    const {
+      email,
+      name,
+      joineddate,
       lane1,
       lane2,
       city,
@@ -254,9 +371,9 @@ exports.supplier_insert = (req) => {
   } finally {
     return result;
   }
-};
+}; */
 
-exports.supplier_update = (req) => {
+/* exports.supplier_update = (req) => {
   result = {
     message: "",
     status: false,
@@ -313,7 +430,7 @@ exports.supplier_update = (req) => {
   } finally {
     return result;
   }
-};
+}; */
 
 exports.nameInput = (req) => {
   result = {
