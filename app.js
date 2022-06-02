@@ -17,12 +17,7 @@ const managerRoutes = require("./api/routes/manager");
 const { supplierRouter } = require("./api/routes/supplier");
 const { supplyRecordRouter } = require("./api/routes/supplyRecord");
 
-app.use(
-  cors({
-    credentials: true,
-    origin: "http://" + process.env.HOST + ":" + process.env.PORT,
-  })
-);
+app.use(cors());
 app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
