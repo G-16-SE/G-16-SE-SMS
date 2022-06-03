@@ -9,5 +9,3 @@ router.post("/addgood", checkAuth, StorageController.addStorage);
 router.post("/update/:id", checkAuth, StorageController.updateStorage);
 
 router.get("/all", checkAuth, StorageController.getStorage);
-
-

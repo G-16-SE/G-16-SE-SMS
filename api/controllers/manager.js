@@ -9,11 +9,11 @@ const Manager = require("../services/database/Manager");
 
 exports.manager_update = async (req, res, next) => {
 
-  if(req.role !== "Manager"){
-    return res.status(401).json({
-      message: "Access Denied"
-    })
-  }
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
   
   const validation_result = validator.manager_update(req);
 

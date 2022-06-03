@@ -4,11 +4,11 @@ const SupplyRecord = require("../services/database/SupplyRecord");
 const Storage = require("../services/database/Storage");
 
 exports.addSupplyRecord = async(req, res , next) => {
-  if(req.role !== "Manager"){
-    return res.status(401).json({
-      message: "Access Denied"
-    })
-  }
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
 
   const validation_result = validator.supplyrecord_insert(req);
 
@@ -63,11 +63,11 @@ exports.addSupplyRecord = async(req, res , next) => {
 };
 
 exports.getSupplyRecordBySupID = async(req, res) => {
-  if(req.role !== "Manager"){
-    return res.status(401).json({
-      message: "Access Denied"
-    })
-  }
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
 
   let result_supplier = await Supplier.findById(req.params.supId);
 
@@ -99,11 +99,11 @@ exports.getSupplyRecordBySupID = async(req, res) => {
 };
 
 exports.getSupplyRecords = async(req, res) => {
-  if(req.role !== "Manager"){
-    return res.status(401).json({
-      message: "Access Denied"
-    })
-  }
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
 
   let result_supplyrecord = await SupplyRecord.findAll();
 
@@ -120,11 +120,11 @@ exports.getSupplyRecords = async(req, res) => {
 };
 
 exports.deleteSupplyRecordrByID = async(req, res) => {
-  if(req.role !== "Manager"){
-    return res.status(401).json({
-      message: "Access Denied"
-    })
-  }
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
 
   let result_supplyrecord = await SupplyRecord.findById(req.params.id);
 
@@ -171,13 +171,13 @@ exports.deleteSupplyRecordrByID = async(req, res) => {
 };
 
 exports.editSupplyRecord = async(req, res) => {
-  if(req.role !== "Manager"){
-    return res.status(401).json({
-      message: "Access Denied"
-    })
-  }
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
 
-  const validation_result = validator.supplyrecord_update(req);
+  //const validation_result = validator.supplyrecord_update(req);
 
   if(validation_result.status){
     return res.status(401).json({
