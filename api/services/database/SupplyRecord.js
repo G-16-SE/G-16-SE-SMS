@@ -154,16 +154,16 @@ const findBySupplierId = async (supID) => {
   return res;
 };
 
-const findAll = async () => {
-  sql = "SELECT * FROM ??";
-  params = ["supply_record"];
+const findById = async (id) => {
+  sql = "SELECT * FROM ?? WHERE ?? = ?";
+  params = ["supply_record", "id", id];
   const res = await select(sql, params);
   return res;
 };
 
-const findById = async (id) => {
-  sql = "SELECT * FROM ?? WHERE ?? = ?";
-  params = ["supply_record", "id", id];
+const findAll = async () => {
+  sql = "SELECT * FROM ??";
+  params = ["supply_record"];
   const res = await select(sql, params);
   return res;
 };

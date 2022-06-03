@@ -56,17 +56,8 @@ exports.addSupplyRecord = async(req, res , next) => {
     });
 
   }else {
-    req.body.stock_amount = req.body.amount;
-    let result_supplyrecord = await SupplyRecord.insertRecordWithNewType(req);
-
-    if(!result_supplyrecord.status){
-      return res.status(500).json({
-        message: "Insertion Failed",
-      });
-    }
-
-    return res.status(201).json({
-      message: "Insertion Success!",
+    return res.status(401).json({
+      message: "Type not exist",
     });
   }
 
@@ -249,10 +240,8 @@ exports.editSupplyRecord = async(req, res) => {
     });
 
   }else {
-    // type can't be change
-
     return res.status(401).json({
-      message: "Type cannot be changed",
+      message: "Type not exist",
     });
 
     

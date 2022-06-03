@@ -257,6 +257,29 @@ exports.user_logout = (req, res, next) => {
   });
 };
 
+exports.get_managers = async (req, res, next) => {
+  if(req.role !== "Admin"){
+    return res.status(401).json({
+      message: "Access Denied"
+    })
+  }
+
+  let result_search = await Manager.findAll(id);
+
+  if(!result_search.status){
+    return res.status(500).json({
+      message: "Search Failed",
+    });
+  }
+
+  return res.status(201).json({
+    message: "Search Success!",
+    data: result_search.values
+  });
+
+
+};
+
 function generateUniqueID() {
   return crypto.randomBytes(8).toString("hex");
 }
