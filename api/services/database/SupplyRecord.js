@@ -23,7 +23,9 @@ const insertRecordWithExistType = async (req) => {
       "stock_amount",
       req.body.stock_amount,
       "last_refilled_date",
-      new Date()
+      Date.now(),
+      "type",
+      req.body.type
     ];
   
     let res = await insertWithTransaction(sql1 , sql2, params1 , params2);
@@ -55,7 +57,7 @@ const insertRecordWithNewType = async (req) => {
     "last_refilled_date",
     req.body.type,
     req.body.stock_amount,
-    new Date()
+    Date.now()
   ];
 
   let res = await insertWithTransaction(sql1 , sql2, params1 , params2);
@@ -85,7 +87,7 @@ const updateRecordWithExistType = async (req) => {
     "stock_amount",
     req.body.stock_amount,
     "last_refilled_date",
-    new Date(),
+    Date.now(),
     "type",
     req.body.type
   ];
@@ -121,7 +123,7 @@ const updateRecordWithNewType = async (req) => {
     "last_refilled_date",
     req.body.type,
     req.body.stock_amount,
-    new Date()
+    Date.now()
   ];
 
   let res = await updateWithTransaction(sql1 , sql2, params1 , params2);
@@ -139,7 +141,7 @@ const deleteRecord = async (req) => {
       "stock_amount",
       req.body.stock_amount,
       "last_refilled_date",
-      new Date()
+      Date.now()
     ];
 
     const res = await removeWithTransaction(sql1 , sql2, params1 , params2);

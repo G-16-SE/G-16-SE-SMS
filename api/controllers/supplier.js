@@ -117,33 +117,44 @@ exports.deleteSupplierById = async (req , res , next) => {
     })
   }
 
-  let result_supplier = await Supplier.findById(req.params.id);
+  if(req.body.selectedrows){
+    req.body.selectedrows.forEach( async (row)=> {
+      let result_supplier = await Supplier.findById(row);
 
-  if(!result_supplier.status){
-    return res.status(500).json({
-      message: "Search Failed",
+      if(!result_supplier.status){
+        return res.status(500).json({
+          message: "Search Failed for id "+ row,
+        });
+      }
+
+      if(result_supplier.values.length < 1){
+        return res.status(400).json({
+          message: "Supplier not found for id "+ row,
+        })
+      }
+
+      const supplier = result_supplier.values[0];
+  
+      let result_delete_supplier = await Supplier.deleteRecord(supplier.id);
+
+      if(!result_delete_supplier.status){
+        return res.status(500).json({
+          message: "Delete Failed for id "+ row,
+        });
+      }
+
+    })
+
+    return res.status(201).json({
+      message: "Delete Success!",
     });
-  }
-
-  if(result_supplier.values.length < 1){
+  }else {
     return res.status(400).json({
-      message: "Supplier not found"
+      message: "Empty input for deletion",
     })
   }
 
-  const supplier = result_supplier.values[0];
   
-  let result_delete_supplier = await Supplier.deleteRecord(supplier.id);
-
-  if(!result_delete_supplier.status){
-    return res.status(500).json({
-      message: "Delete Failed",
-    });
-  }
-
-  return res.status(201).json({
-    message: "Delete Success!",
-  });
 
 };
 

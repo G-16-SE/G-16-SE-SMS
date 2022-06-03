@@ -10,4 +10,6 @@ router.post("/update/:id", checkAuth, StorageController.updateStorage);
 
 router.get("/all", checkAuth, StorageController.getStorage);
 
+module.exports.storageRouter = router;
+
 

@@ -248,6 +248,53 @@ exports.manager_delete = async (req, res, next) => {
   }
 };
 
+exports.managers_delete = async (req, res, next) => {
+
+  if(req.role !== "Admin"){
+    return res.status(401).json({
+      message: "Access Denied"
+    })
+  }
+
+  if(req.body.selectedrows){
+    req.body.selectedrows.forEach( async (row)=> {
+      let result_manager = await Manager.findById(row);
+
+      if(!result_manager.status){
+        return res.status(500).json({
+          message: "Search Failed for id "+ row,
+        });
+      }
+
+      if(result_manager.values.length < 1){
+        return res.status(400).json({
+          message: "Manager not found for id "+ row,
+        })
+      }
+  
+      let result_delete = await User.deleteRecord(
+        result_manager.values[0].user_id
+      );
+
+      if(!result_delete.status){
+        return res.status(500).json({
+          message: "Delete Failed for id "+ row,
+        });
+      }
+
+    })
+
+    return res.status(201).json({
+      message: "Delete Success!",
+    });
+  }else {
+    return res.status(400).json({
+      message: "Empty input for deletion",
+    })
+  }
+
+};
+
 exports.user_logout = (req, res, next) => {
   res.clearCookie("accesstoken");
   res.clearCookie("refreshtoken");
@@ -264,7 +311,7 @@ exports.get_managers = async (req, res, next) => {
     })
   }
 
-  let result_search = await Manager.findAll(id);
+  let result_search = await Manager.findAll();
 
   if(!result_search.status){
     return res.status(500).json({

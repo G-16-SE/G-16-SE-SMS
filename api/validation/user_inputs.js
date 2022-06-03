@@ -12,13 +12,15 @@ exports.manager_signup = (req) => {
       name,
       contactno,
       joineddate,
+      address
     } = req.body;
 
     if (
       validator.isEmpty(email) ||
       validator.isEmpty(name) ||
       validator.isEmpty(contactno) ||
-      validator.isEmpty(joineddate)
+      validator.isEmpty(joineddate) ||
+      validator.isEmpty(address)
     ) {
       result.message = "Input can't be empty";
       result.status = true;
@@ -70,13 +72,15 @@ exports.manager_update = (req) => {
       name,
       contactno,
       joineddate,
+      address
     } = req.body;
 
     if (
       validator.isEmpty(email) ||
       validator.isEmpty(name) ||
       validator.isEmpty(contactno) ||
-      validator.isEmpty(joineddate)
+      validator.isEmpty(joineddate) ||
+      validator.isEmpty(address)
     ) {
       result.message = "Input can't be empty";
       result.status = true;

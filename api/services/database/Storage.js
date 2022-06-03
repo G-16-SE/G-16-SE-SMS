@@ -29,7 +29,7 @@ const findAllTypes = async () => {
 };
 
 const insertRecord = async (req) => {
-    sql = "INSERT INTO ?? (??, ??) VALUES (? , ?)";
+    sql = "INSERT INTO ?? (??, ?? , ?? , ??) VALUES (? , ? , ? , ?)";
     params = [
       "storage",
       "type",
