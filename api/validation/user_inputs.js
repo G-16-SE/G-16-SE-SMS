@@ -560,3 +560,80 @@ exports.supplyrecord_update = (req) => {
   }
 };
 
+exports.storage_insert = (req) => {
+  result = {
+    message: "",
+    status: false,
+  };
+
+  try {
+    const {
+      unit_price,
+      stock_amount,
+      type,
+      unit
+    } = req.body;
+
+    if (
+      validator.isEmpty(unit_price) ||
+      validator.isEmpty(stock_amount) ||
+      validator.isEmpty(type) || 
+      validator.isEmpty(unit)
+    ) {
+      result.message = "Input can't be empty";
+      result.status = true;
+      return result;
+    }
+    if (!validator.isAlpha(type)) {
+      result.message = "Type only needs alpha characters";
+      result.status = true;
+      return result;
+    }
+    if (!validator.isNumeric(stock_amount) || !validator.isNumeric(unit_Prize)) {
+      result.message = "Stock amount and unit price must be a number.";
+      result.status = true;
+      return result;
+    }
+  } catch (error) {
+    result.message = "Input validation failed";
+    result.status = true;
+    return result;
+  } finally {
+    return result;
+  }
+};
+
+exports.storage_update = (req) => {
+  result = {
+    message: "",
+    status: false,
+  };
+
+  try {
+    const {
+      unit_price,
+      stock_amount
+    } = req.body;
+
+    if (
+      validator.isEmpty(unit_price) ||
+      validator.isEmpty(stock_amount)
+    ) {
+      result.message = "Input can't be empty";
+      result.status = true;
+      return result;
+    }
+    if (!validator.isNumeric(stock_amount) || !validator.isNumeric(unit_Prize)) {
+      result.message = "Stock amount and unit price must be a number.";
+      result.status = true;
+      return result;
+    }
+  } catch (error) {
+    result.message = "Input validation failed";
+    result.status = true;
+    return result;
+  } finally {
+    return result;
+  }
+};
+

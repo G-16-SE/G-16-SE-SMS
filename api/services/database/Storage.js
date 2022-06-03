@@ -26,8 +26,12 @@ const insertRecord = async (req) => {
     params = [
       "storage",
       "type",
+      "unit",
+      "unit_price",
       "stock_amount",
       req.body.type,
+      req.body.unit,
+      req.body.unit_price,
       0
     ];
   
@@ -36,11 +40,13 @@ const insertRecord = async (req) => {
 };
 
 const updateRecord = async (req) => {
-    sql = "UPDATE ?? SET ??=? WHERE ??=?";
+    sql = "UPDATE ?? SET ??=? , ?? = ?WHERE ??=?";
     params = [
       "storage",
-      "type",
-      req.body.type,
+      "unit_price",
+      req.body.unit_price,
+      "stock_amount",
+      req.body.stock_amount,
       "id",
       req.body.id
     ];
