@@ -5,7 +5,9 @@ const StorageController = require("../controllers/storage");
 
 const checkAuth = require("../middlewares/authentication/user-auth");
 
-router.post("/addgood", checkAuth, StorageController.addStorage);
-router.post("/update/:id", checkAuth, StorageController.updateStorage);
+router.post("/addgood", StorageController.addStorage);
+router.post("/update/:id", StorageController.updateStorage);
 
-router.get("/all", checkAuth, StorageController.getStorage);
+router.get("/all", StorageController.getStorage);
+
+module.exports.storageRouter = router;

@@ -258,13 +258,13 @@ exports.user_logout = (req, res, next) => {
 };
 
 exports.get_managers = async (req, res, next) => {
-  if(req.role !== "Admin"){
-    return res.status(401).json({
-      message: "Access Denied"
-    })
-  }
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
 
-  let result_search = await Manager.findAll(id);
+  let result_search = await Manager.findAll();
 
   if(!result_search.status){
     return res.status(500).json({

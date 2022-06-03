@@ -89,3 +89,24 @@ exports.manager_update = async (req, res, next) => {
     });
   }
 };
+
+exports.get_manager = async (req, res, next) => {
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
+
+  let result_search = await Manager.findByUserId('111222111222');
+
+  if(!result_search.status){
+    return res.status(500).json({
+      message: "Search Failed",
+    });
+  }
+
+  return res.status(201).json({
+    message: "Search Success!",
+    data: result_search.values
+  });
+};

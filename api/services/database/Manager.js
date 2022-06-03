@@ -90,8 +90,25 @@ const findById = async (id) => {
   return res;
 };
 
+const findAll = async () => {
+  sql = "SELECT ??.* , ??.?? FROM ?? INNER JOIN ?? ON ??.?? = ??.??";
+  params = ["manager" , "user" , "email" ,"manager" , "user" , "user" , "id" , "manager", "user_id"];
+  const res = await select(sql, params);
+  return res;
+};
+
+const findByUserId = async (user_id) => {
+  sql = "SELECT ??.* , ??.?? FROM ?? INNER JOIN ?? ON ??.?? = ??.?? WHERE ??.?? = ?";
+  params = ["manager" , "user" , "email" ,"manager" , "user" , "user" , "id" , "manager", "user_id" , "manager" , "user_id" , user_id];
+  const res = await select(sql, params);
+  return res;
+};
+
+
 module.exports = {
   insertRecord,
   updateRecord,
-  findById
+  findById,
+  findAll,
+  findByUserId
 };

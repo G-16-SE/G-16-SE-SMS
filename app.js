@@ -44,7 +44,7 @@ app.use("/manager", managerRoutes);
 app.use("/supplier", supplierRouter);
 app.use("/supplyRecord", supplyRecordRouter);
 app.use("/storage", storageRouter);
-app.use("/good", storageRouter);
+app.use("/good", goodRouter);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");

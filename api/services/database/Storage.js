@@ -67,6 +67,7 @@ module.exports = {
     findAll,
     findAllTypes,
     insertRecord,
-    updateRecord
+    updateRecord,
+    findAllGoods
 
 };
