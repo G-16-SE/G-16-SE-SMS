@@ -8,8 +8,15 @@ const findByType = async (type) => {
 };
 
 const findAll = async () => {
-    sql = "SELECT * FROM ??";
-    params = ["storage"];
+    sql = "SELECT * FROM ?? WHERE ?? > ?";
+    params = ["storage" , "stock_amount" , 0];
+    const res = await select(sql, params);
+    return res;
+};
+
+const findAllGoods = async () => {
+    sql = "SELECT ?? , ?? ,?? FROM ??";
+    params = ["id" , "type" , "unit" ,"storage"];
     const res = await select(sql, params);
     return res;
 };

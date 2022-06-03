@@ -17,6 +17,7 @@ const managerRoutes = require("./api/routes/manager");
 const { supplierRouter } = require("./api/routes/supplier");
 const { supplyRecordRouter } = require("./api/routes/supplyRecord");
 const { storageRouter } = require("./api/routes/storage");
+const { goodRouter } = require("./api/routes/good");
 
 app.use(
   cors({
@@ -48,6 +49,7 @@ app.use("/manager", managerRoutes);
 app.use("/supplier", supplierRouter);
 app.use("/supplyRecord", supplyRecordRouter);
 app.use("/storage", storageRouter);
+app.use("/good", storageRouter);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");
