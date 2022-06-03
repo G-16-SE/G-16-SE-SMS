@@ -19,12 +19,7 @@ const { supplyRecordRouter } = require("./api/routes/supplyRecord");
 const { storageRouter } = require("./api/routes/storage");
 const { goodRouter } = require("./api/routes/good");
 
-app.use(
-  cors({
-    credentials: true,
-    origin: "http://" + process.env.HOST + ":" + process.env.PORT,
-  })
-);
+app.use(cors());
 app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
