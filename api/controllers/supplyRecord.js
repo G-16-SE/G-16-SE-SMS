@@ -2,6 +2,7 @@ const validator = require("../validation/user_inputs");
 
 const SupplyRecord = require("../services/database/SupplyRecord");
 const Storage = require("../services/database/Storage");
+const Supplier = require("../services/database/Supplier");
 
 exports.addSupplyRecord = async(req, res , next) => {
   // if(req.role !== "Manager"){
@@ -186,13 +187,15 @@ exports.editSupplyRecord = async(req, res) => {
   //   })
   // }
 
+  console.log(req.body)
+
   //const validation_result = validator.supplyrecord_update(req);
 
-  if(validation_result.status){
-    return res.status(401).json({
-      message: validation_result.message,
-    });
-  }
+  // if(validation_result.status){
+  //   return res.status(401).json({
+  //     message: validation_result.message,
+  //   });
+  // }
 
   let result_supplyrecord = await SupplyRecord.findById(req.params.id);
 
@@ -209,7 +212,7 @@ exports.editSupplyRecord = async(req, res) => {
 
   req.body.id = req.params.id;
 
-  let result_supplier = await Supplier.findById(req.body.sup_ID);
+  let result_supplier = await Supplier.findById(req.body.supplier_id);
 
   if(!result_supplier.status){
     return res.status(500).json({

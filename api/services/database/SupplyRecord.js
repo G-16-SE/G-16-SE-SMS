@@ -64,17 +64,15 @@ const insertRecordWithNewType = async (req) => {
 
 const updateRecordWithExistType = async (req) => {
 
-  sql1 = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
+  sql1 = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
   params1 = [
       "supply_record",
-      "supplier_id",
-      req.body.sup_ID,
       "unit_prize",
       req.body.unit_prize,
       "amount",
       req.body.amount,
-      "type",
-      req.body.type,
+      "availability",
+      req.body.availability,
       "received_date",
       req.body.received_date,
       "id",
@@ -87,12 +85,15 @@ const updateRecordWithExistType = async (req) => {
     "stock_amount",
     req.body.stock_amount,
     "last_refilled_date",
-    new Date()
+    new Date(),
+    "type",
+    req.body.type
   ];
 
   let res = await updateWithTransaction(sql1 , sql2, params1 , params2);
   return res;
 };
+
 
 const updateRecordWithNewType = async (req) => {
 
@@ -160,6 +161,14 @@ const findAll = async () => {
   return res;
 };
 
+const findById = async (id) => {
+  sql = "SELECT * FROM ?? WHERE ?? = ?";
+  params = ["supply_record", "id", id];
+  const res = await select(sql, params);
+  return res;
+};
+
+
 module.exports = {
   insertRecordWithExistType,
   insertRecordWithNewType,
@@ -167,5 +176,6 @@ module.exports = {
   updateRecordWithNewType,
   deleteRecord,
   findBySupplierId,
-  findAll
+  findAll,
+  findById
 };

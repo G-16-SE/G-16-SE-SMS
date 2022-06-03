@@ -19,6 +19,7 @@ exports.addSupplier = async(req, res , next) => {
   //     message: validation_result.message,
   //   });
   // }
+  console.log("req+++++", req.body)
 
   let result_suplier = await Supplier.insertRecord(req);
 
@@ -153,15 +154,15 @@ exports.editSupplier = async (req , res , next) => {
   //     message: "Access Denied"
   //   })
   // }
-  console.log(req)
+  console.log(req.body)
 
   // const validation_result = validator.supplier_update(req);
 
-  if(validation_result.status){
-    return res.status(401).json({
-      message: validation_result.message,
-    });
-  }
+  // if(validation_result.status){
+  //   return res.status(401).json({
+  //     message: validation_result.message,
+  //   });
+  // }
 
   let result_supplier = await Supplier.findById(req.params.id);
 

@@ -13,7 +13,7 @@ const insertRecord = async (req) => {
     req.body.email,
     req.body.contact,
     req.body.address,
-    req.body.joineddate,
+    req.body.joined_date,
   ];
 
   const res = await insert(sql, params);
