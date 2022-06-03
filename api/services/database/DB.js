@@ -51,8 +51,8 @@ const insert = (sql, params) =>
           res.status = false;
           resolve(res);
         }
-        console.log(results.insertId);
-        res.values = results.insertId;
+        // console.log(results.insertId);
+        // res.values = results.insertId;
         resolve(res);
       });
     } catch (err) {

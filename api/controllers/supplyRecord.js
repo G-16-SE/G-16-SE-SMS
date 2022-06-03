@@ -11,14 +11,15 @@ exports.addSupplyRecord = async(req, res , next) => {
   //   })
   // }
 
-  const validation_result = validator.supplyrecord_insert(req);
+  // const validation_result = validator.supplyrecord_insert(req);
 
-  if(validation_result.status){
-    return res.status(401).json({
-      message: validation_result.message,
-    });
-  }
+  // if(validation_result.status){
+  //   return res.status(401).json({
+  //     message: validation_result.message,
+  //   });
+  // }
 
+  console.log(req.body)
   let result_supplier = await Supplier.findById(req.body.sup_ID);
 
   if(!result_supplier.status){

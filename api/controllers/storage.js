@@ -17,6 +17,8 @@ exports.addStorage = async(req, res , next) => {
     //   });
     // }
 
+    console.log(req.body)
+
     let result_type = await Storage.findByType(req.body.type);
 
     if(!result_type.status){
@@ -77,7 +79,7 @@ exports.updateStorage = async(req, res , next) => {
   
     let result_update = await Storage.updateRecord(req);
   
-    if(!result_insert.status){
+    if(!result_update.status){
       return res.status(500).json({
         message: "Update Failed",
       });

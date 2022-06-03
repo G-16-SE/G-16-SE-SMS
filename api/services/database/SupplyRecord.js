@@ -23,7 +23,9 @@ const insertRecordWithExistType = async (req) => {
       "stock_amount",
       req.body.stock_amount,
       "last_refilled_date",
-      new Date()
+      new Date(),
+      "type",
+      req.body.type
     ];
   
     let res = await insertWithTransaction(sql1 , sql2, params1 , params2);

@@ -9,7 +9,7 @@ router.post("/create" , SupplierController.addSupplier);
 router.get("/single/:name" , SupplierController.getSupplierByName);
 router.get("/single/:id" , SupplierController.getSupplierById);
 router.get("/all" , SupplierController.getSuppliers);
-router.delete("/remove/:id" , SupplierController.deleteSupplierById);
+router.delete("/remove" , SupplierController.deleteSupplierById);
 router.post("/edit/:id" , SupplierController.editSupplier);
 
 module.exports.supplierRouter = router;
