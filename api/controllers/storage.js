@@ -5,14 +5,16 @@ const validator = require("../validation/user_inputs");
 exports.addStorage = async(req, res , next) => {
     if(req.role !== "Manager"){
       return res.status(401).json({
-        message: "Access Denied"
+        message: "Access Denied",
+        access : false,
+        auth : true
       })
     }
   
     const validation_result = validator.storage_insert(req);
   
     if(validation_result.status){
-      return res.status(401).json({
+      return res.status(400).json({
         message: validation_result.message,
       });
     }
@@ -26,7 +28,7 @@ exports.addStorage = async(req, res , next) => {
     }
 
     if(result_type.values.length > 0){
-        return res.status(401).json({
+        return res.status(400).json({
             message: "Type already exists",
         });
     }
@@ -34,6 +36,11 @@ exports.addStorage = async(req, res , next) => {
     let result_insert = await Storage.insertRecord(req);
   
     if(!result_insert.status){
+      try {
+        fs.unlinkSync(req.file.filename);
+      } catch(err) {
+        console.error(err)
+      }
       return res.status(500).json({
         message: "Insertion Failed",
       });
@@ -49,14 +56,16 @@ exports.addStorage = async(req, res , next) => {
 exports.updateStorage = async(req, res , next) => {
     if(req.role !== "Manager"){
       return res.status(401).json({
-        message: "Access Denied"
+        message: "Access Denied",
+        access : false,
+        auth : true
       })
     }
   
     const validation_result = validator.storage_update(req);
   
     if(validation_result.status){
-      return res.status(401).json({
+      return res.status(400).json({
         message: validation_result.message,
       });
     }
@@ -70,14 +79,14 @@ exports.updateStorage = async(req, res , next) => {
     }
 
     if(result_type.values.length > 0 && result_type.values[0].id!=req.params.id){
-        return res.status(401).json({
+        return res.status(400).json({
             message: "Type already exists",
         });
     }
   
     let result_update = await Storage.updateRecord(req);
   
-    if(!result_insert.status){
+    if(!result_update.status){
       return res.status(500).json({
         message: "Update Failed",
       });
@@ -92,7 +101,9 @@ exports.updateStorage = async(req, res , next) => {
 exports.getStorage = async (req , res , next) => {
     if(req.role !== "Manager"){
       return res.status(401).json({
-        message: "Access Denied"
+        message: "Access Denied",
+        access : false,
+        auth : true
       })
     }
   
@@ -114,7 +125,9 @@ exports.getStorage = async (req , res , next) => {
 exports.getStorageTypes = async (req , res , next) => {
     if(req.role !== "Manager"){
       return res.status(401).json({
-        message: "Access Denied"
+        message: "Access Denied",
+        access : false,
+        auth : true
       })
     }
   

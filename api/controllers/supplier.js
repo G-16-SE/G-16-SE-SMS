@@ -8,14 +8,16 @@ const validator = require("../validation/user_inputs");
 exports.addSupplier = async(req, res , next) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
   const validation_result = validator.supplier_insert(req);
 
   if(validation_result.status){
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -37,14 +39,16 @@ exports.addSupplier = async(req, res , next) => {
 exports.getSupplierByName = async (req , res , next) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
   const validation_result = validator.nameInput(req.params.name);
 
   if(validation_result.status){
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -69,7 +73,9 @@ exports.getSupplierByName = async (req , res , next) => {
 exports.getSupplierById = async (req , res , next) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
@@ -91,7 +97,9 @@ exports.getSupplierById = async (req , res , next) => {
 exports.getSuppliers = async (req , res , next) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
@@ -113,7 +121,9 @@ exports.getSuppliers = async (req , res , next) => {
 exports.deleteSupplierById = async (req , res , next) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
@@ -161,14 +171,16 @@ exports.deleteSupplierById = async (req , res , next) => {
 exports.editSupplier = async (req , res , next) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
   const validation_result = validator.supplier_update(req);
 
   if(validation_result.status){
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }

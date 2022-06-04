@@ -6,14 +6,16 @@ const Storage = require("../services/database/Storage");
 exports.addSupplyRecord = async(req, res , next) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
   const validation_result = validator.supplyrecord_insert(req);
 
   if(validation_result.status){
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -27,7 +29,7 @@ exports.addSupplyRecord = async(req, res , next) => {
   }
 
   if(result_supplier.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supplier not found",
     });
   }
@@ -55,7 +57,7 @@ exports.addSupplyRecord = async(req, res , next) => {
     });
 
   }else {
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Type not exist",
     });
   }
@@ -65,7 +67,9 @@ exports.addSupplyRecord = async(req, res , next) => {
 exports.getSupplyRecordBySupID = async(req, res) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
@@ -78,7 +82,7 @@ exports.getSupplyRecordBySupID = async(req, res) => {
   }
 
   if(result_supplier.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supplier not found",
     });
   }
@@ -101,7 +105,9 @@ exports.getSupplyRecordBySupID = async(req, res) => {
 exports.getSupplyRecords = async(req, res) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
@@ -122,7 +128,9 @@ exports.getSupplyRecords = async(req, res) => {
 exports.deleteSupplyRecordrByID = async(req, res) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
@@ -135,7 +143,7 @@ exports.deleteSupplyRecordrByID = async(req, res) => {
   }
 
   if(result_supplyrecord.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supply record not found",
     });
   }
@@ -149,7 +157,7 @@ exports.deleteSupplyRecordrByID = async(req, res) => {
   }
 
   if(result_type.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Storage type not found",
     });
   }
@@ -173,14 +181,16 @@ exports.deleteSupplyRecordrByID = async(req, res) => {
 exports.editSupplyRecord = async(req, res) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
   const validation_result = validator.supplyrecord_update(req);
 
   if(validation_result.status){
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -193,7 +203,7 @@ exports.editSupplyRecord = async(req, res) => {
     });
   }
   if(result_supplyrecord.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supply record not found",
     });
   }
@@ -209,7 +219,7 @@ exports.editSupplyRecord = async(req, res) => {
   }
 
   if(result_supplier.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supplier not found",
     });
   }
@@ -237,7 +247,7 @@ exports.editSupplyRecord = async(req, res) => {
     });
 
   }else {
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Type not exist",
     });
 

@@ -29,17 +29,19 @@ const findAllTypes = async () => {
 };
 
 const insertRecord = async (req) => {
-    sql = "INSERT INTO ?? (??, ?? , ?? , ??) VALUES (? , ? , ? , ?)";
+    sql = "INSERT INTO ?? (??, ?? , ?? , ?? , ??) VALUES (? , ? , ? , ? , ?)";
     params = [
       "storage",
       "type",
       "unit",
       "unit_price",
       "stock_amount",
+      "image",
       req.body.type,
       req.body.unit,
       req.body.unit_price,
-      0
+      0,
+      req.file.filename
     ];
   
     const res = await insert(sql, params);

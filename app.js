@@ -20,7 +20,7 @@ const { storageRouter } = require("./api/routes/storage");
 const { goodRouter } = require("./api/routes/good");
 
 app.use(cors());
-app.use("/uploads", express.static("uploads"));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());

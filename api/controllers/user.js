@@ -11,14 +11,16 @@ exports.manager_signup = async (req, res, next) => {
 
   if(req.role !== "Admin"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
   const validation_result = validator.manager_signup(req);
 
   if (validation_result.status) {
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -35,7 +37,7 @@ exports.manager_signup = async (req, res, next) => {
     req.body.password = "123456789";
     bcrypt.hash(req.body.password, 10, async (err, hash) => {
       if (err) {
-        return res.status(500).json({
+        return res.status(400).json({
           message: err,
         });
       } else {
@@ -62,7 +64,7 @@ exports.manager_signup = async (req, res, next) => {
       }
     });
   } else {
-    return res.status(500).json({
+    return res.status(400).json({
       message: "Email already exist",
     });
   }
@@ -74,7 +76,7 @@ exports.admin_signup = async (req, res, next) => {
   const validation_result = validator.admin_signup(req);
 
   if (validation_result.status) {
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -90,7 +92,7 @@ exports.admin_signup = async (req, res, next) => {
   if (result_email.values.length < 1) {
     bcrypt.hash(req.body.password, 10, async (err, hash) => {
       if (err) {
-        return res.status(500).json({
+        return res.status(400).json({
           message: err.message,
         });
       } else {
@@ -117,7 +119,7 @@ exports.admin_signup = async (req, res, next) => {
       }
     });
   } else {
-    return res.status(500).json({
+    return res.status(400).json({
       message: "Email already exist",
     });
   }
@@ -127,7 +129,7 @@ exports.user_login = async (req, res, next) => {
   const validation_result = validator.login(req);
 
   if (validation_result.status) {
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -136,7 +138,7 @@ exports.user_login = async (req, res, next) => {
 
   if (!result_email.status) {
     return res.status(502).json({
-      message: "DB error",
+      message: "User find failed",
     });
   }
 
@@ -144,7 +146,7 @@ exports.user_login = async (req, res, next) => {
     user = result_email.values[0];
     bcrypt.compare(req.body.password, user.password, async (err, result) => {
       if (err) {
-        return res.status(401).json({
+        return res.status(400).json({
           message: "Auth failed",
         });
       }
@@ -169,7 +171,7 @@ exports.user_login = async (req, res, next) => {
           },
           process.env.REFRESH_TOKEN_KEY,
           {
-            expiresIn: "6h", // 6 hours
+            expiresIn: "3000000s", 
           }
         );
 
@@ -193,17 +195,17 @@ exports.user_login = async (req, res, next) => {
             accesstoken: accesstoken,
           });
         } else {
-          return res.status(401).json({
+          return res.status(500).json({
             message: "token update error",
           });
         }
       }
-      return res.status(401).json({
+      return res.status(400).json({
         message: "Password is not matching",
       });
     });
   } else {
-    return res.status(500).json({
+    return res.status(400).json({
       message: "User not exist",
     });
   }
@@ -213,7 +215,9 @@ exports.manager_delete = async (req, res, next) => {
 
   if(req.role !== "Admin"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
@@ -233,11 +237,11 @@ exports.manager_delete = async (req, res, next) => {
         });
       } else {
         return res.status(502).json({
-          message: "DB error",
+          message: "Deletion failed",
         });
       }
     } else {
-      return res.status(401).json({
+      return res.status(400).json({
         message: "Manager not found",
       });
     }
@@ -252,7 +256,9 @@ exports.managers_delete = async (req, res, next) => {
 
   if(req.role !== "Admin"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
@@ -307,7 +313,9 @@ exports.user_logout = (req, res, next) => {
 exports.get_managers = async (req, res, next) => {
   if(req.role !== "Admin"){
     return res.status(401).json({
-      message: "Access Denied"
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 

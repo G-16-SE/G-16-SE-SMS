@@ -5,7 +5,9 @@ const validator = require("../validation/user_inputs");
 exports.getGoodTypes = async (req , res , next) => {
     if(req.role !== "Manager"){
       return res.status(401).json({
-        message: "Access Denied"
+        message: "Access Denied",
+        access : false,
+        auth : true
       })
     }
   
@@ -19,7 +21,7 @@ exports.getGoodTypes = async (req , res , next) => {
   
     return res.status(201).json({
       message: "Search Success!",
-      data: res.values
+      data: result_search.values
     });
   
 };
@@ -27,7 +29,9 @@ exports.getGoodTypes = async (req , res , next) => {
 exports.getgoods = async (req , res , next) => {
     if(req.role !== "Manager"){
       return res.status(401).json({
-        message: "Access Denied"
+        message: "Access Denied",
+        access : false,
+        auth : true
       })
     }
   
