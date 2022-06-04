@@ -117,7 +117,7 @@ exports.getStorage = async (req , res , next) => {
   
     return res.status(201).json({
       message: "Search Success!",
-      data: res.values
+      data: result_search.values
     });
   
 };
@@ -141,7 +141,7 @@ exports.getStorageTypes = async (req , res , next) => {
   
     return res.status(201).json({
       message: "Search Success!",
-      data: res.values
+      data: result_search.values
     });
   
 };
