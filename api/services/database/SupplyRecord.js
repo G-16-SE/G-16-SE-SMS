@@ -23,7 +23,7 @@ const insertRecordWithExistType = async (req) => {
       "stock_amount",
       req.body.stock_amount,
       "last_refilled_date",
-      Date.now(),
+      getCurrentDate(),
       "type",
       req.body.type
     ];
@@ -57,7 +57,7 @@ const insertRecordWithNewType = async (req) => {
     "last_refilled_date",
     req.body.type,
     req.body.stock_amount,
-    Date.now()
+    getCurrentDate()
   ];
 
   let res = await insertWithTransaction(sql1 , sql2, params1 , params2);
@@ -87,7 +87,7 @@ const updateRecordWithExistType = async (req) => {
     "stock_amount",
     req.body.stock_amount,
     "last_refilled_date",
-    Date.now(),
+    getCurrentDate(),
     "type",
     req.body.type
   ];
@@ -123,7 +123,7 @@ const updateRecordWithNewType = async (req) => {
     "last_refilled_date",
     req.body.type,
     req.body.stock_amount,
-    Date.now()
+    getCurrentDate()
   ];
 
   let res = await updateWithTransaction(sql1 , sql2, params1 , params2);
@@ -141,7 +141,9 @@ const deleteRecord = async (req) => {
       "stock_amount",
       req.body.stock_amount,
       "last_refilled_date",
-      Date.now()
+      getCurrentDate(),
+      "type",
+      req.body.type,
     ];
 
     const res = await removeWithTransaction(sql1 , sql2, params1 , params2);
@@ -168,6 +170,17 @@ const findAll = async () => {
   const res = await select(sql, params);
   return res;
 };
+
+const getCurrentDate = () => {
+  var date_ob = new Date();
+  var day = ("0" + date_ob.getDate()).slice(-2);
+  var month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+  var year = date_ob.getFullYear();
+    
+  var date = year + "-" + month + "-" + day;
+
+  return date;
+}
 
 module.exports = {
   insertRecordWithExistType,

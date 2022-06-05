@@ -118,7 +118,7 @@ exports.getSuppliers = async (req , res , next) => {
 
 };
 
-exports.deleteSupplierById = async (req , res , next) => {
+exports.deleteSuppliers = async (req , res , next) => {
   if(req.role !== "Manager"){
     return res.status(401).json({
       message: "Access Denied",
@@ -127,19 +127,19 @@ exports.deleteSupplierById = async (req , res , next) => {
     })
   }
 
-  if(req.body.selectedrows){
+  if(req.body){
     req.body.selectedrows.forEach( async (row)=> {
-      let result_supplier = await Supplier.findById(row);
+      let result_supplier = await Supplier.findById(row.id);
 
       if(!result_supplier.status){
         return res.status(500).json({
-          message: "Search Failed for id "+ row,
+          message: "Search Failed for id "+ row.id,
         });
       }
 
       if(result_supplier.values.length < 1){
         return res.status(400).json({
-          message: "Supplier not found for id "+ row,
+          message: "Supplier not found for id "+ row.id,
         })
       }
 
@@ -149,7 +149,7 @@ exports.deleteSupplierById = async (req , res , next) => {
 
       if(!result_delete_supplier.status){
         return res.status(500).json({
-          message: "Delete Failed for id "+ row,
+          message: "Delete Failed for id "+ row.id,
         });
       }
 

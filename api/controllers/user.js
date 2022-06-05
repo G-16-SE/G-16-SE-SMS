@@ -70,6 +70,77 @@ exports.manager_signup = async (req, res, next) => {
   }
 };
 
+exports.manager_update = async (req, res, next) => {
+
+  if(req.role !== "Admin"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
+  
+  const validation_result = validator.manager_update(req);
+
+  if (validation_result.status) {
+    return res.status(400).json({
+      message: validation_result.message,
+    });
+  }
+
+  let result_email = await User.findByEmail(req.body.email);
+
+  if (!result_email.status) {
+    return res.status(502).json({
+      message: "Email find failed",
+    });
+  }
+
+  let result_manager = await Manager.findById(req.body.id);
+
+  if (!result_manager.status) {
+    return res.status(502).json({
+      message: "Manager find failed",
+    });
+  }
+
+  if(result_manager.values.length < 1){
+    return res.status(400).json({
+      message: "Manager not exist",
+    });
+  }
+
+  const email_condition =
+    (result_email.values.length > 0 &&
+      result_manager.values[0].email == req.body.email) ||
+    result_email.values.length < 1;
+
+  if (email_condition) {
+    try {
+      req.body.user_id = result_manager.values[0].user_id;
+      let update_result = await Manager.updateRecord(req);
+      if (update_result.status) {
+        return res.status(201).json({
+          message: "Updation Success!",
+        });
+      } else {
+        return res.status(500).json({
+          message: "Updation Failed",
+        });
+      }
+    } catch (err) {
+      return res.status(500).json({
+        message: err,
+      });
+    }
+  } else {
+    return res.status(400).json({
+      message: "Email already exist",
+    });
+  }
+};
+
+
 exports.admin_signup = async (req, res, next) => {
 
 
@@ -262,19 +333,19 @@ exports.managers_delete = async (req, res, next) => {
     })
   }
 
-  if(req.body.selectedrows){
-    req.body.selectedrows.forEach( async (row)=> {
-      let result_manager = await Manager.findById(row);
+  if(req.body){
+    req.body.forEach( async (row)=> {
+      let result_manager = await Manager.findById(row.id);
 
       if(!result_manager.status){
         return res.status(500).json({
-          message: "Search Failed for id "+ row,
+          message: "Search Failed for id "+ row.id,
         });
       }
 
       if(result_manager.values.length < 1){
         return res.status(400).json({
-          message: "Manager not found for id "+ row,
+          message: "Manager not found for id "+ row.id,
         })
       }
   
@@ -284,7 +355,7 @@ exports.managers_delete = async (req, res, next) => {
 
       if(!result_delete.status){
         return res.status(500).json({
-          message: "Delete Failed for id "+ row,
+          message: "Delete Failed for id "+ row.id,
         });
       }
 

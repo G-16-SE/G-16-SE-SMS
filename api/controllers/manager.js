@@ -33,9 +33,23 @@ exports.manager_update = async (req, res, next) => {
     });
   }
 
+  let result_manager = await Manager.findById(req.body.id);
+
+  if (!result_manager.status) {
+    return res.status(502).json({
+      message: "Manager find failed",
+    });
+  }
+
+  if(result_manager.values.length < 1){
+    return res.status(400).json({
+      message: "Manager not exist",
+    });
+  }
+
   const email_condition =
     (result_email.values.length > 0 &&
-      result_email.values[0].email == req.body.email) ||
+      result_manager.values[0].email == req.body.email) ||
     result_email.values.length < 1;
 
   if (email_condition) {
@@ -47,7 +61,7 @@ exports.manager_update = async (req, res, next) => {
           });
         } else {
           try {
-            req.body.user_id = req.user_id;
+            req.body.user_id = result_manager.values[0].user_id;
             req.body.hashPassword = hash;
             let update_result = await Manager.updateRecord(req);
             if (update_result.status) {
@@ -68,7 +82,8 @@ exports.manager_update = async (req, res, next) => {
       });
     } else {
       try {
-        req.body.user_id = req.user_id;
+        req.body.user_id = result_manager.values[0].user_id;
+        if(!req.body.password) req.body.password = "";
         let update_result = await Manager.updateRecord(req);
         if (update_result.status) {
           return res.status(201).json({

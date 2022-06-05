@@ -49,13 +49,15 @@ const insertRecord = async (req) => {
 };
 
 const updateRecord = async (req) => {
-    sql = "UPDATE ?? SET ??=? , ?? = ?WHERE ??=?";
+    sql = "UPDATE ?? SET ??=? , ?? = ? , ?? = ? WHERE ??=?";
     params = [
       "storage",
       "unit_price",
       req.body.unit_price,
       "stock_amount",
       req.body.stock_amount,
+      "last_refilled_date",
+      getCurrentDate(),
       "id",
       req.body.id
     ];
@@ -63,6 +65,17 @@ const updateRecord = async (req) => {
     const res = await update(sql, params);
     return res;
 };
+
+const getCurrentDate = () => {
+    var date_ob = new Date();
+    var day = ("0" + date_ob.getDate()).slice(-2);
+    var month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+    var year = date_ob.getFullYear();
+      
+    var date = year + "-" + month + "-" + day;
+  
+    return date;
+  }
 
 module.exports = {
     findByType,
