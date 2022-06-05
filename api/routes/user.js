@@ -13,6 +13,6 @@ router.post("/manager-update", checkAuth, UserController.manager_update);
 router.get("/managers", checkAuth, UserController.get_managers);
 
 router.post("/login", UserController.user_login);
-router.get("/logout", checkAuth, UserController.user_logout);
+router.get("/logout", UserController.user_logout);
 
 module.exports = router;
