@@ -129,6 +129,7 @@ const update = (sql, params) =>
 
     try {
       sql = mysql.format(sql, params);
+      console.log(sql)
       connection.query(sql, function (error, results, fields) {
         if (error) {
           console.error(error.message);

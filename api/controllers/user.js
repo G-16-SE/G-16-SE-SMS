@@ -9,21 +9,24 @@ const Manager = require("../services/database/Manager");
 
 exports.manager_signup = async (req, res, next) => {
 
-  if(req.role !== "Admin"){
-    return res.status(401).json({
-      message: "Access Denied",
-      access : false,
-      auth : true
-    })
-  }
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
 
-  const validation_result = validator.manager_signup(req);
+  // const validation_result = validator.manager_signup(req);
 
-  if (validation_result.status) {
-    return res.status(400).json({
-      message: validation_result.message,
-    });
-  }
+  // if (validation_result.status) {
+  //   return res.status(400).json({
+  //     message: validation_result.message,
+  //   });
+  // }
+
+  console.log(req.body)
+
 
   let result_email = await User.findByEmail(req.body.email);
 
@@ -192,7 +195,7 @@ exports.user_login = async (req, res, next) => {
 
           return res.status(200).json({
             message: "Login successful",
-            accesstoken: accesstoken,
+            role: user.role
           });
         } else {
           return res.status(500).json({
@@ -213,13 +216,13 @@ exports.user_login = async (req, res, next) => {
 
 exports.manager_delete = async (req, res, next) => {
 
-  if(req.role !== "Admin"){
-    return res.status(401).json({
-      message: "Access Denied",
-      access : false,
-      auth : true
-    })
-  }
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
 
   const id = req.params.id;
 
@@ -254,13 +257,13 @@ exports.manager_delete = async (req, res, next) => {
 
 exports.managers_delete = async (req, res, next) => {
 
-  if(req.role !== "Admin"){
-    return res.status(401).json({
-      message: "Access Denied",
-      access : false,
-      auth : true
-    })
-  }
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
 
   if(req.body.selectedrows){
     req.body.selectedrows.forEach( async (row)=> {

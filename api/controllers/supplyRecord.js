@@ -67,13 +67,13 @@ exports.addSupplyRecord = async(req, res , next) => {
 };
 
 exports.getSupplyRecordBySupID = async(req, res) => {
-  if(req.role !== "Manager"){
-    return res.status(401).json({
-      message: "Access Denied",
-      access : false,
-      auth : true
-    })
-  }
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
 
   let result_supplier = await Supplier.findById(req.params.supId);
 
@@ -105,13 +105,13 @@ exports.getSupplyRecordBySupID = async(req, res) => {
 };
 
 exports.getSupplyRecords = async(req, res) => {
-  if(req.role !== "Manager"){
-    return res.status(401).json({
-      message: "Access Denied",
-      access : false,
-      auth : true
-    })
-  }
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
 
   let result_supplyrecord = await SupplyRecord.findAll();
 
@@ -128,13 +128,13 @@ exports.getSupplyRecords = async(req, res) => {
 };
 
 exports.deleteSupplyRecordrByID = async(req, res) => {
-  if(req.role !== "Manager"){
-    return res.status(401).json({
-      message: "Access Denied",
-      access : false,
-      auth : true
-    })
-  }
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
 
   let result_supplyrecord = await SupplyRecord.findById(req.params.id);
 

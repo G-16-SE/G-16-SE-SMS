@@ -21,6 +21,7 @@ const insertRecord = async (req) => {
 };
 
 const updateRecord = async (req) => {
+  console.log(req.body)
   sql = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
   params = [
     "supplier",
@@ -33,7 +34,7 @@ const updateRecord = async (req) => {
     "address",
     req.body.address,
     "joined_date",
-    req.body.joineddate,
+    req.body.joined_date,
     "id",
     req.body.id
   ];

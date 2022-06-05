@@ -49,13 +49,15 @@ const insertRecord = async (req) => {
 };
 
 const updateRecord = async (req) => {
-    sql = "UPDATE ?? SET ??=? , ?? = ?WHERE ??=?";
+    sql = "UPDATE ?? SET ??=? , ?? = ?, ?? = ? WHERE ??=?";
     params = [
       "storage",
       "unit_price",
       req.body.unit_price,
       "stock_amount",
       req.body.stock_amount,
+      "last_refilled_date",
+      Date.now(),
       "id",
       req.body.id
     ];

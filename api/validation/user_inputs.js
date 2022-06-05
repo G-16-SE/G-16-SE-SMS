@@ -6,6 +6,8 @@ exports.manager_signup = (req) => {
     status: false,
   };
 
+  
+
   try {
     const {
       email,
@@ -63,6 +65,8 @@ exports.manager_update = (req) => {
     message: "",
     status: false,
   };
+
+  
 
   try {
     const {

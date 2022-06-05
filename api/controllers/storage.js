@@ -17,7 +17,7 @@ exports.addStorage = async(req, res , next) => {
     //   });
     // }
 
-    console.log(req.body)
+    // console.log("BOdy", req.body)
 
     let result_type = await Storage.findByType(req.body.type);
 
