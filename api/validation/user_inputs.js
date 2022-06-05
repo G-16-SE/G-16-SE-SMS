@@ -10,17 +10,15 @@ exports.manager_signup = (req) => {
     const {
       email,
       name,
-      contactno,
-      joineddate,
-      address
+      contact,
+      joine_date
     } = req.body;
 
     if (
       validator.isEmpty(email) ||
       validator.isEmpty(name) ||
-      validator.isEmpty(contactno) ||
-      validator.isEmpty(joineddate) ||
-      validator.isEmpty(address)
+      validator.isEmpty(contact) ||
+      validator.isEmpty(joine_date)
     ) {
       result.message = "Input can't be empty";
       result.status = true;
@@ -37,14 +35,14 @@ exports.manager_signup = (req) => {
       return result;
     }
     if (
-      !validator.isNumeric(contactno) &&
-      !validator.isLength(contactno, { min: 10, max: 10 })
+      !validator.isNumeric(contact) &&
+      !validator.isLength(contact, { min: 10, max: 10 })
     ) {
       result.message = "Invalid Contact Number";
       result.status = true;
       return result;
     }
-    if (!validator.isDate(joineddate)) {
+    if (!validator.isDate(joine_date)) {
       result.message = "Invalid Date";
       result.status = true;
       return result;
@@ -70,17 +68,15 @@ exports.manager_update = (req) => {
       password,
       repassword,
       name,
-      contactno,
-      joineddate,
-      address
+      contact,
+      joine_date
     } = req.body;
 
     if (
       validator.isEmpty(email) ||
       validator.isEmpty(name) ||
-      validator.isEmpty(contactno) ||
-      validator.isEmpty(joineddate) ||
-      validator.isEmpty(address)
+      validator.isEmpty(contact) ||
+      validator.isEmpty(joine_date)
     ) {
       result.message = "Input can't be empty";
       result.status = true;
@@ -107,14 +103,14 @@ exports.manager_update = (req) => {
       return result;
     }
     if (
-      !validator.isNumeric(contactno) &&
-      !validator.isLength(contactno, { min: 10, max: 10 })
+      !validator.isNumeric(contact) &&
+      !validator.isLength(contact, { min: 10, max: 10 })
     ) {
       result.message = "Invalid Contact Number";
       result.status = true;
       return result;
     }
-    if (!validator.isDate(joineddate)) {
+    if (!validator.isDate(joine_date)) {
       result.message = "Invalid Date";
       result.status = true;
       return result;
@@ -573,14 +569,12 @@ exports.storage_insert = (req) => {
   try {
     const {
       unit_price,
-      stock_amount,
       type,
       unit
     } = req.body;
 
     if (
       validator.isEmpty(unit_price) ||
-      validator.isEmpty(stock_amount) ||
       validator.isEmpty(type) || 
       validator.isEmpty(unit)
     ) {
@@ -593,12 +587,13 @@ exports.storage_insert = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isNumeric(stock_amount) || !validator.isNumeric(unit_Prize)) {
-      result.message = "Stock amount and unit price must be a number.";
+    if (!validator.isNumeric(unit_price)) {
+      result.message = "Unit price must be a number.";
       result.status = true;
       return result;
     }
   } catch (error) {
+    console.log(error.message)
     result.message = "Input validation failed";
     result.status = true;
     return result;

@@ -1,19 +1,28 @@
+const fs = require('fs');
 const Storage = require("../services/database/Storage");
 
 const validator = require("../validation/user_inputs");
 
 exports.addStorage = async(req, res , next) => {
     if(req.role !== "Manager"){
+      remove_image(req.file.filename);
       return res.status(401).json({
         message: "Access Denied",
         access : false,
         auth : true
       })
     }
+
+    if(req.fileError){
+      return res.status(400).json({
+        message: req.fileError,
+    });
+    }
   
     const validation_result = validator.storage_insert(req);
   
     if(validation_result.status){
+      remove_image(req.file.filename);
       return res.status(400).json({
         message: validation_result.message,
       });
@@ -22,25 +31,23 @@ exports.addStorage = async(req, res , next) => {
     let result_type = await Storage.findByType(req.body.type);
 
     if(!result_type.status){
-        return res.status(500).json({
+      remove_image(req.file.filename);
+      return res.status(500).json({
             message: "Type find failed",
           });
     }
 
     if(result_type.values.length > 0){
-        return res.status(400).json({
+      remove_image(req.file.filename);
+      return res.status(400).json({
             message: "Type already exists",
         });
     }
-  
+
     let result_insert = await Storage.insertRecord(req);
   
     if(!result_insert.status){
-      try {
-        fs.unlinkSync(req.file.filename);
-      } catch(err) {
-        console.error(err)
-      }
+      remove_image(req.file.filename);
       return res.status(500).json({
         message: "Insertion Failed",
       });
@@ -49,6 +56,9 @@ exports.addStorage = async(req, res , next) => {
     return res.status(201).json({
       message: "Insertion Success!",
     });
+
+
+  
   
 };
 
@@ -145,4 +155,12 @@ exports.getStorageTypes = async (req , res , next) => {
     });
   
 };
+
+const remove_image = async (path) => {
+  try {
+    await fs.unlinkSync('public/img/'+path);
+  } catch(err) {
+    console.error(err)
+  }
+}
 

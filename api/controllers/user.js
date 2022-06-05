@@ -263,7 +263,7 @@ exports.user_login = async (req, res, next) => {
 
           return res.status(200).json({
             message: "Login successful",
-            accesstoken: accesstoken,
+            role: user.role,
           });
         } else {
           return res.status(500).json({

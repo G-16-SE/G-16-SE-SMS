@@ -36,7 +36,7 @@ const insertRecord = async (req) => {
       "unit",
       "unit_price",
       "stock_amount",
-      "image",
+      "imagee",
       req.body.type,
       req.body.unit,
       req.body.unit_price,
@@ -76,6 +76,8 @@ const getCurrentDate = () => {
   
     return date;
   }
+
+
 
 module.exports = {
     findByType,

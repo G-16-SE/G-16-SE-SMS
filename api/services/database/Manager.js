@@ -21,11 +21,10 @@ const insertRecord = async (req) => {
     "name",
     "contact",
     "join_date",
-    "address",
     req.body.user_id,
     req.body.name,
-    req.body.contactno,
-    req.body.joineddate
+    req.body.contact,
+    req.body.joine_date
   ];
 
   let res = await insertWithTransaction(sql1, sql2, params1, params2);
@@ -48,9 +47,9 @@ const updateRecord = async (req) => {
       "name",
       req.body.name,
       "contact",
-      req.body.contactno,
+      req.body.contact,
       "join_date",
-      req.body.joineddate,
+      req.body.joine_date,
       "user_id",
       req.body.user_id
     ];
@@ -72,9 +71,9 @@ const updateRecord = async (req) => {
       "name",
       req.body.name,
       "contact",
-      req.body.contactno,
+      req.body.contact,
       "join_date",
-      req.body.joineddate,
+      req.body.joine_date,
       "user_id",
       req.body.user_id
     ];

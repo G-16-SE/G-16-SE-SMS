@@ -18,9 +18,9 @@ module.exports = async (req, res, next) => {
                 process.env.REFRESH_TOKEN_KEY,
                 async (err, decodedrefreshtoken) => {
                   if (err) {
-                    console.error(err.message);
+                    console.error(err.message , "111111111111");
                     return res.status(401).json({
-                      message: "Access Denied",
+                      message: "Auth failed",
                       access : false,
                       auth : false
                     })
@@ -95,7 +95,7 @@ module.exports = async (req, res, next) => {
                             });
                           }
                         } else {
-                          
+                          console.log("222222222222")
                           return res.status(401).json({
                             message: "Auth failed",
                             access : false,
@@ -121,6 +121,7 @@ module.exports = async (req, res, next) => {
                 }
               );
             } else {
+              console.log("33333333333")
               return res.status(401).json({
                 message: "Auth failed",
                 access : false,
