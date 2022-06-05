@@ -28,7 +28,7 @@ exports.addStorage = async(req, res , next) => {
     }
 
     if(result_type.values.length > 0){
-        return res.status(401).json({
+        return res.status(400).json({
             message: "Type already exists",
         });
     }
@@ -36,6 +36,11 @@ exports.addStorage = async(req, res , next) => {
     let result_insert = await Storage.insertRecord(req);
   
     if(!result_insert.status){
+      try {
+        fs.unlinkSync(req.file.filename);
+      } catch(err) {
+        console.error(err)
+      }
       return res.status(500).json({
         message: "Insertion Failed",
       });
@@ -72,7 +77,7 @@ exports.updateStorage = async(req, res , next) => {
     }
 
     if(result_type.values.length > 0 && result_type.values[0].id!=req.params.id){
-        return res.status(401).json({
+        return res.status(400).json({
             message: "Type already exists",
         });
     }

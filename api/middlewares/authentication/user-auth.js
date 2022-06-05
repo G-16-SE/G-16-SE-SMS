@@ -20,8 +20,10 @@ module.exports = async (req, res, next) => {
                   if (err) {
                     console.error(err.message);
                     return res.status(401).json({
-                      message: "Auth failed",
-                    });
+                      message: "Access Denied",
+                      access : false,
+                      auth : false
+                    })
                   } else {
                     let result_user = await User.findById(
                       decodedrefreshtoken.userId
@@ -58,7 +60,7 @@ module.exports = async (req, res, next) => {
                             },
                             process.env.REFRESH_TOKEN_KEY,
                             {
-                              expiresIn: "6h", // 6 hours
+                              expiresIn: "300000s", 
                             }
                           );
 
@@ -88,26 +90,32 @@ module.exports = async (req, res, next) => {
 
                             next();
                           } else {
-                            return res.status(401).json({
+                            return res.status(500).json({
                               message: "token update error",
                             });
                           }
                         } else {
-                          console.log("1");
+                          
                           return res.status(401).json({
                             message: "Auth failed",
-                          });
+                            access : false,
+                            auth : false
+                          })
                         }
                       } else {
                         console.log("2");
                         return res.status(401).json({
                           message: "User not found",
-                        });
+                          access : false,
+                          auth : false
+                        })
                       }
                     } else {
-                      return res.status(502).json({
-                        message: "DB error",
-                      });
+                      return res.status(401).json({
+                        message: "DB Error",
+                        access : false,
+                        auth : false
+                      })
                     }
                   }
                 }
@@ -115,7 +123,9 @@ module.exports = async (req, res, next) => {
             } else {
               return res.status(401).json({
                 message: "Auth failed",
-              });
+                access : false,
+                auth : false
+              })
             }
           } else {
             
@@ -135,7 +145,9 @@ module.exports = async (req, res, next) => {
               console.error(err.message);
               return res.status(401).json({
                 message: "Auth failed",
-              });
+                access : false,
+                auth : false
+              })
             } else {
               let result_user = await User.findById(decodedrefreshtoken.userId);
               if (result_user.status) {
@@ -170,7 +182,7 @@ module.exports = async (req, res, next) => {
                       },
                       process.env.REFRESH_TOKEN_KEY,
                       {
-                        expiresIn: "6h", // 6 hours
+                        expiresIn: "300000s",
                       }
                     );
 
@@ -199,22 +211,30 @@ module.exports = async (req, res, next) => {
                     } else {
                       return res.status(401).json({
                         message: "token update error",
-                      });
+                        access : false,
+                        auth : false
+                      })
                     }
                   } else {
                     return res.status(401).json({
                       message: "User not found",
-                    });
+                      access : false,
+                      auth : false
+                    })
                   }
                 } else {
                   return res.status(401).json({
                     message: "User not found",
-                  });
+                    access : false,
+                    auth : false
+                  })
                 }
               } else {
-                return res.status(502).json({
+                return res.status(401).json({
                   message: "DB error",
-                });
+                  access : false,
+                  auth : false
+                })
               }
             }
           }
@@ -222,13 +242,17 @@ module.exports = async (req, res, next) => {
       } else {
         return res.status(401).json({
           message: "Auth failed",
-        });
+          access : false,
+          auth : false
+        })
       }
     }
   } catch (error) {
     console.error(error.message);
     return res.status(401).json({
       message: "Auth failed",
-    });
+      access : false,
+      auth : false
+    })
   }
 };

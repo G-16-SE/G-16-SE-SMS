@@ -7,7 +7,9 @@ const Supplier = require("../services/database/Supplier");
 exports.addSupplyRecord = async(req, res , next) => {
   // if(req.role !== "Manager"){
   //   return res.status(401).json({
-  //     message: "Access Denied"
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
   //   })
   // }
 
@@ -29,7 +31,7 @@ exports.addSupplyRecord = async(req, res , next) => {
   }
 
   if(result_supplier.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supplier not found",
     });
   }
@@ -57,7 +59,7 @@ exports.addSupplyRecord = async(req, res , next) => {
     });
 
   }else {
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Type not exist",
     });
   }
@@ -65,11 +67,13 @@ exports.addSupplyRecord = async(req, res , next) => {
 };
 
 exports.getSupplyRecordBySupID = async(req, res) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied"
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   let result_supplier = await Supplier.findById(req.params.supId);
 
@@ -80,7 +84,7 @@ exports.getSupplyRecordBySupID = async(req, res) => {
   }
 
   if(result_supplier.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supplier not found",
     });
   }
@@ -101,11 +105,13 @@ exports.getSupplyRecordBySupID = async(req, res) => {
 };
 
 exports.getSupplyRecords = async(req, res) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied"
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   let result_supplyrecord = await SupplyRecord.findAll();
 
@@ -122,11 +128,13 @@ exports.getSupplyRecords = async(req, res) => {
 };
 
 exports.deleteSupplyRecordrByID = async(req, res) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied"
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   let result_supplyrecord = await SupplyRecord.findById(req.params.id);
 
@@ -137,7 +145,7 @@ exports.deleteSupplyRecordrByID = async(req, res) => {
   }
 
   if(result_supplyrecord.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supply record not found",
     });
   }
@@ -151,7 +159,7 @@ exports.deleteSupplyRecordrByID = async(req, res) => {
   }
 
   if(result_type.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Storage type not found",
     });
   }
@@ -175,11 +183,13 @@ exports.deleteSupplyRecordrByID = async(req, res) => {
 exports.editSupplyRecord = async(req, res) => {
   // if(req.role !== "Manager"){
   //   return res.status(401).json({
-  //     message: "Access Denied"
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
   //   })
   // }
 
-  console.log(req.body)
+  // console.log(req.body)
 
   //const validation_result = validator.supplyrecord_update(req);
 
@@ -197,7 +207,7 @@ exports.editSupplyRecord = async(req, res) => {
     });
   }
   if(result_supplyrecord.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supply record not found",
     });
   }
@@ -213,7 +223,7 @@ exports.editSupplyRecord = async(req, res) => {
   }
 
   if(result_supplier.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supplier not found",
     });
   }
@@ -241,10 +251,8 @@ exports.editSupplyRecord = async(req, res) => {
     });
 
   }else {
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Type not exist",
     });
-
-    
   }
 };

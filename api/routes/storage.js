@@ -4,6 +4,7 @@ const router = Router();
 const StorageController = require("../controllers/storage");
 
 const checkAuth = require("../middlewares/authentication/user-auth");
+const upload = require("../middlewares/uploads/image-upload");
 
 router.post("/addgood", StorageController.addStorage);
 router.post("/update/:id", StorageController.updateStorage);

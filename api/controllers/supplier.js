@@ -6,13 +6,15 @@ const Address = require("../services/database/Address");
 const validator = require("../validation/user_inputs");
 
 exports.addSupplier = async(req, res , next) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied"
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
-  // const validation_result = validator.supplier_insert(req);
+  const validation_result = validator.supplier_insert(req);
 
   // if(validation_result.status){
   //   return res.status(401).json({
@@ -36,16 +38,18 @@ exports.addSupplier = async(req, res , next) => {
 };
 
 exports.getSupplierByName = async (req , res , next) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied"
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   const validation_result = validator.nameInput(req.params.name);
 
   if(validation_result.status){
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -68,11 +72,13 @@ exports.getSupplierByName = async (req , res , next) => {
 };
 
 exports.getSupplierById = async (req , res , next) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied"
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   let result_search = await Supplier.findByName( req.params.id);
 
@@ -90,11 +96,13 @@ exports.getSupplierById = async (req , res , next) => {
 };
 
 exports.getSuppliers = async (req , res , next) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied"
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   let result_search = await Supplier.findAll();
 
@@ -112,39 +120,52 @@ exports.getSuppliers = async (req , res , next) => {
 };
 
 exports.deleteSupplierById = async (req , res , next) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied"
-  //   })
-  // }
-
-  let result_supplier = await Supplier.findById(req.params.id);
-
-  if(!result_supplier.status){
-    return res.status(500).json({
-      message: "Search Failed",
-    });
-  }
-
-  if(result_supplier.values.length < 1){
-    return res.status(400).json({
-      message: "Supplier not found"
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
     })
   }
 
-  const supplier = result_supplier.values[0];
-  
-  let result_delete_supplier = await Supplier.deleteRecord(supplier.id);
+  if(req.body.selectedrows){
+    req.body.selectedrows.forEach( async (row)=> {
+      let result_supplier = await Supplier.findById(row);
 
-  if(!result_delete_supplier.status){
-    return res.status(500).json({
-      message: "Delete Failed",
+      if(!result_supplier.status){
+        return res.status(500).json({
+          message: "Search Failed for id "+ row,
+        });
+      }
+
+      if(result_supplier.values.length < 1){
+        return res.status(400).json({
+          message: "Supplier not found for id "+ row,
+        })
+      }
+
+      const supplier = result_supplier.values[0];
+  
+      let result_delete_supplier = await Supplier.deleteRecord(supplier.id);
+
+      if(!result_delete_supplier.status){
+        return res.status(500).json({
+          message: "Delete Failed for id "+ row,
+        });
+      }
+
+    })
+
+    return res.status(201).json({
+      message: "Delete Success!",
     });
+  }else {
+    return res.status(400).json({
+      message: "Empty input for deletion",
+    })
   }
 
-  return res.status(201).json({
-    message: "Delete Success!",
-  });
+  
 
 };
 
@@ -154,7 +175,6 @@ exports.editSupplier = async (req , res , next) => {
   //     message: "Access Denied"
   //   })
   // }
-  console.log(req.body)
 
   // const validation_result = validator.supplier_update(req);
 

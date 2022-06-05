@@ -14,17 +14,19 @@ const insertRecord = async (req) => {
     req.body.role,
   ];
 
-  sql2 = "INSERT INTO ?? (??, ??, ??, ??) VALUES (? , ?, ? , ?)";
+  sql2 = "INSERT INTO ?? (??, ??, ??, ?? , ??) VALUES (? , ?, ? , ? , ?)";
   params2 = [
     "manager",
     "user_id",
     "name",
     "contact",
     "join_date",
+    "address",
     req.body.user_id,
     req.body.name,
     req.body.contactno,
     req.body.joineddate,
+    req.body.address,
   ];
 
   let res = await insertWithTransaction(sql1, sql2, params1, params2);
@@ -41,7 +43,7 @@ const updateRecord = async (req) => {
     sql1 = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
     params1 = ["user", "email", req.body.email, "id", req.body.user_id];
 
-    sql2 = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
+    sql2 = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
     params2 = [
       "manager",
       "name",
@@ -50,6 +52,8 @@ const updateRecord = async (req) => {
       req.body.contactno,
       "join_date",
       req.body.joineddate,
+      "address",
+      req.body.address,
       "user_id",
       req.body.user_id
     ];
@@ -65,7 +69,7 @@ const updateRecord = async (req) => {
       req.body.user_id,
     ];
 
-    sql2 = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
+    sql2 = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
     params2 = [
       "manager",
       "name",
@@ -74,6 +78,8 @@ const updateRecord = async (req) => {
       req.body.contactno,
       "join_date",
       req.body.joineddate,
+      "address",
+      req.body.address,
       "user_id",
       req.body.user_id
     ];
@@ -103,7 +109,6 @@ const findByUserId = async (user_id) => {
   const res = await select(sql, params);
   return res;
 };
-
 
 module.exports = {
   insertRecord,
