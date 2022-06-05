@@ -36,7 +36,7 @@ const insertRecord = async (req) => {
       "unit",
       "unit_price",
       "stock_amount",
-      "image",
+      "imagee",
       req.body.type,
       req.body.unit,
       req.body.unit_price,
@@ -57,7 +57,7 @@ const updateRecord = async (req) => {
       "stock_amount",
       req.body.stock_amount,
       "last_refilled_date",
-      Date.now(),
+      getCurrentDate(),
       "id",
       req.body.id
     ];
@@ -65,6 +65,19 @@ const updateRecord = async (req) => {
     const res = await update(sql, params);
     return res;
 };
+
+const getCurrentDate = () => {
+    var date_ob = new Date();
+    var day = ("0" + date_ob.getDate()).slice(-2);
+    var month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+    var year = date_ob.getFullYear();
+      
+    var date = year + "-" + month + "-" + day;
+  
+    return date;
+  }
+
+
 
 module.exports = {
     findByType,

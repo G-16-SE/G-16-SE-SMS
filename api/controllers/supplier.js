@@ -135,13 +135,13 @@ exports.deleteSupplierById = async (req , res , next) => {
 
       if(!result_supplier.status){
         return res.status(500).json({
-          message: "Search Failed for id "+ row,
+          message: "Search Failed for id "+ row.id,
         });
       }
 
       if(result_supplier.values.length < 1){
         return res.status(400).json({
-          message: "Supplier not found for id "+ row,
+          message: "Supplier not found for id "+ row.id,
         })
       }
 
@@ -151,7 +151,7 @@ exports.deleteSupplierById = async (req , res , next) => {
 
       if(!result_delete_supplier.status){
         return res.status(500).json({
-          message: "Delete Failed for id "+ row,
+          message: "Delete Failed for id "+ row.id,
         });
       }
 
