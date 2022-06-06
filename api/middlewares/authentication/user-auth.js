@@ -80,10 +80,14 @@ module.exports = async (req, res, next) => {
                             res.cookie("accesstoken", newaccesstoken, {
                               maxAge: 900000,
                               httpOnly: true,
+                              sameSite: 'none',
+                              secure: true,
                             });
                             res.cookie("refreshtoken", newrefreshtoekn, {
                               maxAge: 900000,
                               httpOnly: true,
+                              sameSite: 'none',
+                              secure: true,
                             });
 
                             req.user_id = user.id;
@@ -201,10 +205,14 @@ module.exports = async (req, res, next) => {
                       res.cookie("accesstoken", newaccesstoken, {
                         maxAge: 900000,
                         httpOnly: true,
+                        sameSite: 'none',
+                        secure: true,
                       });
                       res.cookie("refreshtoken", newrefreshtoekn, {
                         maxAge: 900000,
                         httpOnly: true,
+                        sameSite: 'none',
+                        secure: true,
                       });
 
                       req.user_id = user.id;

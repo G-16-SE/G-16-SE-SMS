@@ -256,10 +256,14 @@ exports.user_login = async (req, res, next) => {
           res.cookie("accesstoken", accesstoken, {
             maxAge: 900000,
             httpOnly: true,
+            sameSite: 'none',
+            secure: true,
           });
           res.cookie("refreshtoken", refreshtoekn, {
             maxAge: 900000,
             httpOnly: true,
+            sameSite: 'none',
+            secure: true,
           });
 
           return res.status(200).json({
