@@ -36,7 +36,7 @@ const insertRecord = async (req) => {
       "unit",
       "unit_price",
       "stock_amount",
-      "imagee",
+      "image",
       req.body.type,
       req.body.unit,
       req.body.unit_price,

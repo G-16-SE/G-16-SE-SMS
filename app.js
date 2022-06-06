@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+//const fileUpload = require('express-fileupload');
 //const { exec } = require("./api/services/database/Tables");
 
 
@@ -24,6 +25,7 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+// app.use(fileUpload());
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");

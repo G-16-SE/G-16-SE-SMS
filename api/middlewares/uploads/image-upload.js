@@ -22,10 +22,42 @@ exports.upload_image = multer({
         file.mimetype === 'image/jpg' || 
         file.mimetype === 'image/png' ||
         file.mimetype === 'image/gif') {
-            cb(null, true);
+            cb(null, true);        
         } else {
             cb(null, false);
             req.fileError = 'File format is not valid';
         }
     }
  })
+
+// exports.upload_image = (req , res , next) => {
+//         console.log("upload middleware start")
+//         if (!req.files)
+//             return res.status(400).json({
+//                 message: "No files were uploaded.",
+//             });;
+//         var file = req.files.image;
+//         var img_name=file.name;
+//          if(file.mimetype == "image/jpeg" ||file.mimetype == "image/png"||file.mimetype == "image/gif" ){
+
+//             const name = Date.now()+file.name;
+                                
+//             file.mv('public/img/'+name, function(err) {
+//                 if(err){
+//                     return res.status(400).json({
+//                         message: err.message,
+//                     });
+
+//                 }else {
+//                     req.files.filename = name;
+//                     console.log("call next for controller")
+//                     next();
+//                 }
+//             });
+//           } else {
+//             return res.status(400).json({
+//                 message: "File format is not valid",
+//             });
+//           }
+// };
+

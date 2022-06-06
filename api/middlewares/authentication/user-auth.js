@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
                 process.env.REFRESH_TOKEN_KEY,
                 async (err, decodedrefreshtoken) => {
                   if (err) {
-                    console.error(err.message , "111111111111");
+                    //console.error(err.message , "111111111111");
                     return res.status(401).json({
                       message: "Auth failed",
                       access : false,
@@ -37,7 +37,8 @@ module.exports = async (req, res, next) => {
                           result_user.values[0].token,
                           "base64"
                         ).toString("ascii");
-                        if (savedrefreshtoken == refreshtoken) {
+                        //const savedrefreshtoken = result_user.values[0].token;
+                        if (savedrefreshtoken === req.cookies.refreshtoken) {
                           const user = result_user.values[0];
 
                           const newaccesstoken = jwt.sign(
@@ -95,7 +96,7 @@ module.exports = async (req, res, next) => {
                             });
                           }
                         } else {
-                          console.log("222222222222")
+                          //console.log("222222222222")
                           return res.status(401).json({
                             message: "Auth failed",
                             access : false,
@@ -103,7 +104,7 @@ module.exports = async (req, res, next) => {
                           })
                         }
                       } else {
-                        console.log("2");
+                        //console.log("2");
                         return res.status(401).json({
                           message: "User not found",
                           access : false,
@@ -121,7 +122,7 @@ module.exports = async (req, res, next) => {
                 }
               );
             } else {
-              console.log("33333333333")
+              //console.log("33333333333")
               return res.status(401).json({
                 message: "Auth failed",
                 access : false,
@@ -160,7 +161,8 @@ module.exports = async (req, res, next) => {
                     result_user.values[0].token,
                     "base64"
                   ).toString("ascii");
-                  if (savedrefreshtoken == refreshtoken) {
+                  //const savedrefreshtoken = result_user.values[0].token;
+                  if (savedrefreshtoken === req.cookies.refreshtoken) {
                     const user = result_user.values[0];
 
                     const newaccesstoken = jwt.sign(
@@ -241,6 +243,7 @@ module.exports = async (req, res, next) => {
           }
         );
       } else {
+        //console.log("55555555555555")
         return res.status(401).json({
           message: "Auth failed",
           access : false,
