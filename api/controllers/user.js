@@ -9,13 +9,13 @@ const Manager = require("../services/database/Manager");
 
 exports.manager_signup = async (req, res, next) => {
 
-  // if(req.role !== "Admin"){
-  //   return res.status(401).json({
-  //     message: "Access Denied",
-  //     access : false,
-  //     auth : true
-  //   })
-  // }
+  if(req.role !== "Admin"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   // const validation_result = validator.manager_signup(req);
 
@@ -24,8 +24,6 @@ exports.manager_signup = async (req, res, next) => {
   //     message: validation_result.message,
   //   });
   // }
-
-  console.log(req.body)
 
 
   let result_email = await User.findByEmail(req.body.email);
@@ -287,13 +285,13 @@ exports.user_login = async (req, res, next) => {
 
 exports.manager_delete = async (req, res, next) => {
 
-  // if(req.role !== "Admin"){
-  //   return res.status(401).json({
-  //     message: "Access Denied",
-  //     access : false,
-  //     auth : true
-  //   })
-  // }
+  if(req.role !== "Admin"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   const id = req.params.id;
 
@@ -328,13 +326,13 @@ exports.manager_delete = async (req, res, next) => {
 
 exports.managers_delete = async (req, res, next) => {
 
-  // if(req.role !== "Admin"){
-  //   return res.status(401).json({
-  //     message: "Access Denied",
-  //     access : false,
-  //     auth : true
-  //   })
-  // }
+  if(req.role !== "Admin"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   if(req.body){
     req.body.forEach( async (row)=> {
@@ -385,11 +383,11 @@ exports.user_logout = (req, res, next) => {
 };
 
 exports.get_managers = async (req, res, next) => {
-  // if(req.role !== "Admin"){
-  //   return res.status(401).json({
-  //     message: "Access Denied"
-  //   })
-  // }
+  if(req.role !== "Admin"){
+    return res.status(401).json({
+      message: "Access Denied"
+    })
+  }
 
   let result_search = await Manager.findAll();
 

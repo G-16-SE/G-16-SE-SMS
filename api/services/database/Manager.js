@@ -84,8 +84,8 @@ const updateRecord = async (req) => {
 };
 
 const findById = async (id) => {
-  sql = "SELECT * FROM ?? WHERE ?? = ?";
-  params = ["manager", "id", id];
+  sql = "SELECT ??.* , ??.?? FROM ?? INNER JOIN ?? ON ??.?? = ??.?? WHERE ??.?? = ?";
+  params = ["manager" , "user" , "email" ,"manager" , "user" , "user" , "id" , "manager", "user_id" , "manager" , "id" , id];
   const res = await select(sql, params);
   return res;
 };

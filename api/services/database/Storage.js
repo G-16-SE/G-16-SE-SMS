@@ -15,8 +15,8 @@ const findAll = async () => {
 };
 
 const findAllGoods = async () => {
-    sql = "SELECT ?? , ?? ,?? FROM ??";
-    params = ["id" , "type" , "unit" ,"storage"];
+    sql = "SELECT ?? , ??, ?? ,?? FROM ??";
+    params = ["id" , "type" , "unit", "image" ,"storage"];
     const res = await select(sql, params);
     return res;
 };

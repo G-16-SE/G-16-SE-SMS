@@ -1,7 +1,7 @@
 const { insert, update, select, remove } = require("./DB");
 
 const insertRecord = async (req) => {
-  sql = "INSERT INTO ?? (?? , ?? , ?? , ?? , ??) VALUES (?, ? , ? , ? , ?)";
+  sql = "INSERT INTO ?? (?? , ?? , ?? , ?? , ??, ??) VALUES (?, ? , ? , ? , ?, ?)";
   params = [
     "supplier",
     "name",
@@ -9,11 +9,13 @@ const insertRecord = async (req) => {
     "contact",
     "address",
     "joined_date",
+    "isExist",
     req.body.name,
     req.body.email,
     req.body.contact,
     req.body.address,
     req.body.joined_date,
+    1
   ];
 
   const res = await insert(sql, params);
@@ -21,7 +23,6 @@ const insertRecord = async (req) => {
 };
 
 const updateRecord = async (req) => {
-  console.log(req.body)
   sql = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
   params = [
     "supplier",
@@ -44,34 +45,36 @@ const updateRecord = async (req) => {
 };
 
 const deleteRecord = async (id) => {
-  sql = "DELETE FROM ?? WHERE ?? = ?"
+  sql = "UPDATE ?? SET ?? = ? WHERE ?? = ?"
   params = [
     "supplier",
+    "isExist",
+    0,
     "id",
     id
   ];
 
-  const res = await remove(sql, params);
+  const res = await update(sql, params);
   return res;
 };
 
 const findByName = async (name) => {
-    sql = "SELECT * FROM ??  WHERE ??.?? LIKE ?";
-    params = ["supplier", "supplier" , "name", name];
+    sql = "SELECT * FROM ??  WHERE ??.?? LIKE ? AND ?? = ?";
+    params = ["supplier", "supplier" , "name", name, "isExist", 1];
     let res = await select(sql, params);
     return res;
 };
 
 const findById = async (id) => {
-  sql = "SELECT * FROM ??  WHERE ??.?? = ?";
-  params = ["supplier", "supplier" , "id", id];
+  sql = "SELECT * FROM ??  WHERE ??.?? = ? AND ?? = ?";
+  params = ["supplier", "supplier" , "id", id, "isExist", 1];
   let res = await select(sql, params);
   return res;
 };
 
 const findAll = async () => {
-  sql = "SELECT * FROM ??";
-  params = ["supplier"];
+  sql = "SELECT * FROM ?? WHERE ?? = ?";
+  params = ["supplier", "isExist", 1];
   let res = await select(sql, params);
   return res;
 };

@@ -19,8 +19,9 @@ const { supplierRouter } = require("./api/routes/supplier");
 const { supplyRecordRouter } = require("./api/routes/supplyRecord");
 const { storageRouter } = require("./api/routes/storage");
 const { goodRouter } = require("./api/routes/good");
+const { clearScreenDown } = require("readline");
 
-app.use(cors());
+app.use(cors({origin:'http://localhost:3000', credentials:true}));
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -28,7 +29,8 @@ app.use(cookieParser());
 // app.use(fileUpload());
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", 'http://localhost:3000');
+  res.header('Access-Control-Allow-Credentials', true)
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"

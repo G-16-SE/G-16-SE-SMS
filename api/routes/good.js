@@ -5,8 +5,8 @@ const GoodController = require("../controllers/good");
 
 const checkAuth = require("../middlewares/authentication/user-auth");
 
-router.get("/allgoods", GoodController.getgoods);
+router.get("/allgoods", checkAuth, GoodController.getgoods);
 
-router.get("/alltypes", GoodController.getGoodTypes);
+router.get("/alltypes", checkAuth, GoodController.getGoodTypes);
 
 module.exports.goodRouter = router;

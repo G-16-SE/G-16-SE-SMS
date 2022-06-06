@@ -6,13 +6,13 @@ const Address = require("../services/database/Address");
 const validator = require("../validation/user_inputs");
 
 exports.addSupplier = async(req, res , next) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied",
-  //     access : false,
-  //     auth : true
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   const validation_result = validator.supplier_insert(req);
 
@@ -37,13 +37,13 @@ exports.addSupplier = async(req, res , next) => {
 };
 
 exports.getSupplierByName = async (req , res , next) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied",
-  //     access : false,
-  //     auth : true
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   // const validation_result = validator.nameInput(req.params.name);
 
@@ -71,13 +71,13 @@ exports.getSupplierByName = async (req , res , next) => {
 };
 
 exports.getSupplierById = async (req , res , next) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied",
-  //     access : false,
-  //     auth : true
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   let result_search = await Supplier.findByName( req.params.id);
 
@@ -95,13 +95,13 @@ exports.getSupplierById = async (req , res , next) => {
 };
 
 exports.getSuppliers = async (req , res , next) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied",
-  //     access : false,
-  //     auth : true
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
   let result_search = await Supplier.findAll();
 
@@ -119,20 +119,21 @@ exports.getSuppliers = async (req , res , next) => {
 };
 
 exports.deleteSupplierById = async (req , res , next) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied",
-  //     access : false,
-  //     auth : true
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied",
+      access : false,
+      auth : true
+    })
+  }
 
 
-
+  
   if(req.body){
     req.body.forEach( async (row)=> {
-      let result_supplier = await Supplier.findById(row);
+      let result_supplier = await Supplier.findById(row.id);
 
+      // console.log(row)
       if(!result_supplier.status){
         return res.status(500).json({
           message: "Search Failed for id "+ row.id,
@@ -171,11 +172,11 @@ exports.deleteSupplierById = async (req , res , next) => {
 };
 
 exports.editSupplier = async (req , res , next) => {
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied"
-  //   })
-  // }
+  if(req.role !== "Manager"){
+    return res.status(401).json({
+      message: "Access Denied"
+    })
+  }
 
   // const validation_result = validator.supplier_update(req);
 

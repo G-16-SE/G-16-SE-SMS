@@ -4,11 +4,11 @@ const Storage = require("../services/database/Storage");
 const validator = require("../validation/user_inputs");
 
 exports.addStorage = async(req, res , next) => {
-    // if(req.role !== "Manager"){
-    //   return res.status(401).json({
-    //     message: "Access Denied"
-    //   })
-    // }
+    if(req.role !== "Manager"){
+      return res.status(401).json({
+        message: "Access Denied"
+      })
+    }
   
     // const validation_result = validator.storage_insert(req);
   
@@ -18,7 +18,6 @@ exports.addStorage = async(req, res , next) => {
     //   });
     // }
 
-    // console.log("BOdy", req.body)
 
     let result_type = await Storage.findByType(req.body.type);
 
@@ -56,16 +55,15 @@ exports.addStorage = async(req, res , next) => {
         message: "Server error",
       });
     }
-    
 };
 
 
 exports.updateStorage = async(req, res , next) => {
-    // if(req.role !== "Manager"){
-    //   return res.status(401).json({
-    //     message: "Access Denied"
-    //   })
-    // }
+    if(req.role !== "Manager"){
+      return res.status(401).json({
+        message: "Access Denied"
+      })
+    }
   
     // const validation_result = validator.storage_update(req);
   
@@ -104,11 +102,11 @@ exports.updateStorage = async(req, res , next) => {
 };
 
 exports.getStorage = async (req , res , next) => {
-    // if(req.role !== "Manager"){
-    //   return res.status(401).json({
-    //     message: "Access Denied"
-    //   })
-    // }
+    if(req.role !== "Manager"){
+      return res.status(401).json({
+        message: "Access Denied"
+      })
+    }
   
     let result_search = await Storage.findAll();
   
@@ -126,11 +124,11 @@ exports.getStorage = async (req , res , next) => {
 };
 
 exports.getStorageTypes = async (req , res , next) => {
-    // if(req.role !== "Manager"){
-    //   return res.status(401).json({
-    //     message: "Access Denied"
-    //   })
-    // }
+    if(req.role !== "Manager"){
+      return res.status(401).json({
+        message: "Access Denied"
+      })
+    }
   
     let result_search = await Storage.findAllTypes();
   
