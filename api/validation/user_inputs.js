@@ -6,21 +6,14 @@ exports.manager_signup = (req) => {
     status: false,
   };
 
-  
-
   try {
-    const {
-      email,
-      name,
-      contact,
-      joine_date
-    } = req.body;
+    const { email, name, contact, join_date } = req.body;
 
     if (
       validator.isEmpty(email) ||
       validator.isEmpty(name) ||
       validator.isEmpty(contact) ||
-      validator.isEmpty(joine_date)
+      validator.isEmpty(join_date)
     ) {
       result.message = "Input can't be empty";
       result.status = true;
@@ -31,7 +24,7 @@ exports.manager_signup = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replace(" ", "s"))) {
+    if (!validator.isAlpha(name.replaceAll(" ", "s"))) {
       result.message = "Name only needs alpha characters";
       result.status = true;
       return result;
@@ -44,12 +37,13 @@ exports.manager_signup = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isDate(joine_date)) {
+    if (!validator.isDate(join_date)) {
       result.message = "Invalid Date";
       result.status = true;
       return result;
     }
   } catch (error) {
+    console.log(error.message, error.stack);
     result.message = "Input validation failed";
     result.status = true;
     return result;
@@ -64,23 +58,15 @@ exports.manager_update = (req) => {
     status: false,
   };
 
-  
-
   try {
-    const {
-      email,
-      password,
-      repassword,
-      name,
-      contact,
-      joine_date
-    } = req.body;
+    //
+    const { email, password, repassword, name, contact, join_date } = req.body;
 
     if (
       validator.isEmpty(email) ||
       validator.isEmpty(name) ||
       validator.isEmpty(contact) ||
-      validator.isEmpty(joine_date)
+      validator.isEmpty(join_date)
     ) {
       result.message = "Input can't be empty";
       result.status = true;
@@ -96,7 +82,7 @@ exports.manager_update = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replace(" ", "s"))) {
+    if (!validator.isAlpha(name.replaceAll(" ", "s"))) {
       result.message = "Name only needs alpha characters";
       result.status = true;
       return result;
@@ -114,7 +100,7 @@ exports.manager_update = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isDate(joine_date)) {
+    if (!validator.isDate(join_date)) {
       result.message = "Invalid Date";
       result.status = true;
       return result;
@@ -192,7 +178,6 @@ exports.login = (req) => {
       return result;
     }
   } catch (error) {
-    console.log(error.message);
     result.message = "Input validation failed";
     result.status = true;
     return result;
@@ -208,20 +193,14 @@ exports.supplier_insert = (req) => {
   };
 
   try {
-    const {
-      email,
-      name,
-      joineddate,
-      address,
-      contact
-    } = req.body;
+    const { email, name, joined_date, address, contact } = req.body;
 
     if (
       validator.isEmpty(email) ||
       validator.isEmpty(name) ||
       validator.isEmpty(contact) ||
       validator.isEmpty(address) ||
-      validator.isEmpty(joineddate)
+      validator.isEmpty(joined_date)
     ) {
       result.message = "Input can't be empty";
       result.status = true;
@@ -232,7 +211,8 @@ exports.supplier_insert = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replace(" ", "s"))) {
+  
+    if (!validator.isAlpha(name.replaceAll(" ", "s"))) {
       result.message = "Name only needs characters";
       result.status = true;
       return result;
@@ -245,12 +225,13 @@ exports.supplier_insert = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isDate(joineddate)) {
+    if (!validator.isDate(joined_date)) {
       result.message = "Invalid Date";
       result.status = true;
       return result;
     }
   } catch (error) {
+    console.log(error.message, error.stack);
     result.message = "Input validation failed";
     result.status = true;
     return result;
@@ -266,20 +247,14 @@ exports.supplier_update = (req) => {
   };
 
   try {
-    const {
-      email,
-      name,
-      joineddate,
-      address,
-      contact
-    } = req.body;
+    const { email, name, joined_date, address, contact } = req.body;
 
     if (
       validator.isEmpty(email) ||
       validator.isEmpty(name) ||
       validator.isEmpty(contact) ||
       validator.isEmpty(address) ||
-      validator.isEmpty(joineddate)
+      validator.isEmpty(joined_date)
     ) {
       result.message = "Input can't be empty";
       result.status = true;
@@ -290,7 +265,7 @@ exports.supplier_update = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replace(" ", "s"))) {
+    if (!validator.isAlpha(name.replaceAll(" ", "s"))) {
       result.message = "Name only needs characters";
       result.status = true;
       return result;
@@ -303,7 +278,7 @@ exports.supplier_update = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isDate(joineddate)) {
+    if (!validator.isDate(joined_date)) {
       result.message = "Invalid Date";
       result.status = true;
       return result;
@@ -316,7 +291,6 @@ exports.supplier_update = (req) => {
     return result;
   }
 };
-
 
 /* exports.supplier_insert = (req) => {
   result = {
@@ -353,7 +327,7 @@ exports.supplier_update = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replace(" ", "s")) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
+    if (!validator.isAlpha(name.replaceAll(" ", "s")) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
       result.message = "Name , city and district only needs alpha characters";
       result.status = true;
       return result;
@@ -412,7 +386,7 @@ exports.supplier_update = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replace(" ", "s")) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
+    if (!validator.isAlpha(name.replaceAll(" ", "s")) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
       result.message = "Name only needs alpha characters";
       result.status = true;
       return result;
@@ -443,18 +417,14 @@ exports.nameInput = (req) => {
   };
 
   try {
-    const {
-      name
-    } = req.body;
+    const { name } = req.body;
 
-    if (
-      validator.isEmpty(name)
-    ) {
+    if (validator.isEmpty(name)) {
       result.message = "Input can't be empty";
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replace(" ", "s"))) {
+    if (!validator.isAlpha(name.replaceAll(" ", "s"))) {
       result.message = "Name only needs alpha characters";
       result.status = true;
       return result;
@@ -475,15 +445,10 @@ exports.supplyrecord_insert = (req) => {
   };
 
   try {
-    const {
-      unit_Prize,
-      amount,
-      type,
-      received_date
-    } = req.body;
+    const { unit_prize, amount, type, received_date } = req.body;
 
     if (
-      validator.isEmpty(unit_Prize) ||
+      validator.isEmpty(unit_prize) ||
       validator.isEmpty(amount) ||
       validator.isEmpty(type) ||
       validator.isEmpty(received_date)
@@ -497,7 +462,7 @@ exports.supplyrecord_insert = (req) => {
       result.status = true;
       return result;
     }
-    if(!validator.isNumeric(amount) || !validator.isNumeric(unit_Prize)){
+    if (!validator.isNumeric(amount) || !validator.isNumeric(unit_prize)) {
       result.message = "Amount and Unit Prize cannot include characters";
       result.status = true;
       return result;
@@ -523,16 +488,11 @@ exports.supplyrecord_update = (req) => {
   };
 
   try {
-    const {
-      unit_Prize,
-      amount,
-      type,
-      received_date
-    } = req.body;
+    const { unit_prize, amount, type, received_date } = req.body;
 
     if (
-      validator.isEmpty(unit_Prize) ||
-      validator.isEmpty(amount) ||
+      validator.isEmpty(unit_prize.toString()) ||
+      validator.isEmpty(amount.toString()) ||
       validator.isEmpty(type) ||
       validator.isEmpty(received_date)
     ) {
@@ -545,7 +505,7 @@ exports.supplyrecord_update = (req) => {
       result.status = true;
       return result;
     }
-    if(!validator.isNumeric(amount) || !validator.isNumeric(unit_Prize)){
+    if (!validator.isNumeric(amount.toString()) || !validator.isNumeric(unit_prize.toString())) {
       result.message = "Amount and Unit Prize cannot include characters";
       result.status = true;
       return result;
@@ -556,6 +516,7 @@ exports.supplyrecord_update = (req) => {
       return result;
     }
   } catch (error) {
+    console.log(error.message, error.stack);
     result.message = "Input validation failed";
     result.status = true;
     return result;
@@ -571,15 +532,11 @@ exports.storage_insert = (req) => {
   };
 
   try {
-    const {
-      unit_price,
-      type,
-      unit
-    } = req.body;
+    const { unit_price, type, unit } = req.body;
 
     if (
       validator.isEmpty(unit_price) ||
-      validator.isEmpty(type) || 
+      validator.isEmpty(type) ||
       validator.isEmpty(unit)
     ) {
       result.message = "Input can't be empty";
@@ -597,7 +554,6 @@ exports.storage_insert = (req) => {
       return result;
     }
   } catch (error) {
-    console.log(error.message)
     result.message = "Input validation failed";
     result.status = true;
     return result;
@@ -613,20 +569,21 @@ exports.storage_update = (req) => {
   };
 
   try {
-    const {
-      unit_price,
-      stock_amount
-    } = req.body;
+    const { unit_price, stock_amount } = req.body;
 
     if (
-      validator.isEmpty(unit_price) ||
-      validator.isEmpty(stock_amount)
+      validator.isEmpty(unit_price.toString()) ||
+      validator.isEmpty(stock_amount.toString())
     ) {
       result.message = "Input can't be empty";
       result.status = true;
       return result;
     }
-    if (!validator.isNumeric(stock_amount) || !validator.isNumeric(unit_Prize)) {
+
+    if (
+      !validator.isNumeric(stock_amount.toString()) ||
+      !validator.isNumeric(unit_price.toString())
+    ) {
       result.message = "Stock amount and unit price must be a number.";
       result.status = true;
       return result;
@@ -639,4 +596,3 @@ exports.storage_update = (req) => {
     return result;
   }
 };
-

@@ -156,8 +156,8 @@ const updateWithTransaction = (sql1, sql2, params1, params2) =>
       sql1 = mysql.format(sql1, params1);
       sql2 = mysql.format(sql2, params2);
 
-      console.log(sql1)
-      console.log(sql2)
+      // console.log(sql1)
+      // console.log(sql2)
 
       connection.beginTransaction(function (err) {
         if (err) {
@@ -268,7 +268,7 @@ const removeWithTransaction = (sql1, sql2, params1, params2) =>
       sql1 = mysql.format(sql1, params1);
       sql2 = mysql.format(sql2, params2);
 
-      console.log(sql1 , sql2);
+      // console.log(sql1 , sql2);
 
       connection.beginTransaction(function (err) {
         if (err) {

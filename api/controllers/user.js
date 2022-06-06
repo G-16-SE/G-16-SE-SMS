@@ -9,21 +9,21 @@ const Manager = require("../services/database/Manager");
 
 exports.manager_signup = async (req, res, next) => {
 
-  if(req.role !== "Admin"){
-    return res.status(401).json({
-      message: "Access Denied",
-      access : false,
-      auth : true
-    })
-  }
-
-  // const validation_result = validator.manager_signup(req);
-
-  // if (validation_result.status) {
-  //   return res.status(400).json({
-  //     message: validation_result.message,
-  //   });
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
   // }
+
+  const validation_result = validator.manager_signup(req);
+
+  if (validation_result.status) {
+    return res.status(400).json({
+      message: validation_result.message,
+    });
+  }
 
 
   let result_email = await User.findByEmail(req.body.email);
@@ -73,13 +73,13 @@ exports.manager_signup = async (req, res, next) => {
 
 exports.manager_update = async (req, res, next) => {
 
-  if(req.role !== "Admin"){
-    return res.status(401).json({
-      message: "Access Denied",
-      access : false,
-      auth : true
-    })
-  }
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
   
   const validation_result = validator.manager_update(req);
 
@@ -285,13 +285,13 @@ exports.user_login = async (req, res, next) => {
 
 exports.manager_delete = async (req, res, next) => {
 
-  if(req.role !== "Admin"){
-    return res.status(401).json({
-      message: "Access Denied",
-      access : false,
-      auth : true
-    })
-  }
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
 
   const id = req.params.id;
 
@@ -326,13 +326,13 @@ exports.manager_delete = async (req, res, next) => {
 
 exports.managers_delete = async (req, res, next) => {
 
-  if(req.role !== "Admin"){
-    return res.status(401).json({
-      message: "Access Denied",
-      access : false,
-      auth : true
-    })
-  }
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
 
   if(req.body){
     req.body.forEach( async (row)=> {
@@ -383,11 +383,12 @@ exports.user_logout = (req, res, next) => {
 };
 
 exports.get_managers = async (req, res, next) => {
-  if(req.role !== "Admin"){
-    return res.status(401).json({
-      message: "Access Denied"
-    })
-  }
+
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
 
   let result_search = await Manager.findAll();
 
@@ -397,6 +398,8 @@ exports.get_managers = async (req, res, next) => {
     });
   }
 
+
+  console.log(result_search.values);
   return res.status(201).json({
     message: "Search Success!",
     data: result_search.values

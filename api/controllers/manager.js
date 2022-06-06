@@ -9,21 +9,13 @@ const Manager = require("../services/database/Manager");
 
 exports.manager_update = async (req, res, next) => {
 
-  if(req.role !== "Manager"){
-    return res.status(401).json({
-      message: "Access Denied",
-      access : false,
-      auth : true
-    })
-  }
-  
-  // const validation_result = validator.manager_update(req);
+  const validation_result = validator.manager_update(req);
 
-  // if (validation_result.status) {
-  //   return res.status(400).json({
-  //     message: validation_result.message,
-  //   });
-  // }
+  if (validation_result.status) {
+    return res.status(400).json({
+      message: validation_result.message,
+    });
+  }
 
   let result_email = await User.findByEmail(req.body.email);
 
@@ -111,11 +103,11 @@ exports.manager_update = async (req, res, next) => {
 };
 
 exports.get_manager = async (req, res, next) => {
-  if(req.role !== "Manager"){
-    return res.status(401).json({
-      message: "Access Denied"
-    })
-  }
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
   let result_search = await Manager.findByUserId(req.user_id);
 
   if(!result_search.status){
