@@ -533,6 +533,7 @@ exports.storage_insert = (req) => {
 
   try {
     const { unit_price, type, unit } = req.body;
+    //console.log(req)
 
     if (
       validator.isEmpty(unit_price) ||
@@ -554,6 +555,7 @@ exports.storage_insert = (req) => {
       return result;
     }
   } catch (error) {
+    // console.log(error.stack, error.message)
     result.message = "Input validation failed";
     result.status = true;
     return result;
