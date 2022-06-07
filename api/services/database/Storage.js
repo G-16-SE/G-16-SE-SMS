@@ -41,7 +41,7 @@ const insertRecord = async (req) => {
       req.body.unit,
       req.body.unit_price,
       0,
-      req.file.filename
+      "goods.png"
     ];
   
     const res = await insert(sql, params);

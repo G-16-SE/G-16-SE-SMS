@@ -24,7 +24,7 @@ exports.manager_signup = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replaceAll(" ", "s"))) {
+    if (!validator.isAlpha(name.replace(/ /gi, "s"))) {
       result.message = "Name only needs alpha characters";
       result.status = true;
       return result;
@@ -82,7 +82,7 @@ exports.manager_update = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replaceAll(" ", "s"))) {
+    if (!validator.isAlpha(name.replace(/ /gi, "s"))) {
       result.message = "Name only needs alpha characters";
       result.status = true;
       return result;
@@ -212,7 +212,7 @@ exports.supplier_insert = (req) => {
       return result;
     }
   
-    if (!validator.isAlpha(name.replaceAll(" ", "s"))) {
+    if (!validator.isAlpha(name.replace(/ /gi, "s"))) {
       result.message = "Name only needs characters";
       result.status = true;
       return result;
@@ -265,7 +265,7 @@ exports.supplier_update = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replaceAll(" ", "s"))) {
+    if (!validator.isAlpha(name.replace(/ /gi, "s"))) {
       result.message = "Name only needs characters";
       result.status = true;
       return result;
@@ -327,7 +327,7 @@ exports.supplier_update = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replaceAll(" ", "s")) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
+    if (!validator.isAlpha(name.replace(/ /gi, "s")) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
       result.message = "Name , city and district only needs alpha characters";
       result.status = true;
       return result;
@@ -386,7 +386,7 @@ exports.supplier_update = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replaceAll(" ", "s")) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
+    if (!validator.isAlpha(name.replace(/ /gi, "s")) || !validator.isAlpha(city) || !validator.isAlpha(district)) {
       result.message = "Name only needs alpha characters";
       result.status = true;
       return result;
@@ -424,7 +424,7 @@ exports.nameInput = (req) => {
       result.status = true;
       return result;
     }
-    if (!validator.isAlpha(name.replaceAll(" ", "s"))) {
+    if (!validator.isAlpha(name.replace(/ /gi, "s"))) {
       result.message = "Name only needs alpha characters";
       result.status = true;
       return result;
@@ -533,6 +533,7 @@ exports.storage_insert = (req) => {
 
   try {
     const { unit_price, type, unit } = req.body;
+    //console.log(req)
 
     if (
       validator.isEmpty(unit_price) ||
@@ -554,6 +555,7 @@ exports.storage_insert = (req) => {
       return result;
     }
   } catch (error) {
+    // console.log(error.stack, error.message)
     result.message = "Input validation failed";
     result.status = true;
     return result;
