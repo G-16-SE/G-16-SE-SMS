@@ -21,7 +21,7 @@ const { storageRouter } = require("./api/routes/storage");
 const { goodRouter } = require("./api/routes/good");
 const { clearScreenDown } = require("readline");
 
-app.use(cors({origin:'*', credentials:true}));
+app.use(cors({origin:'https://g-16-sms.netlify.app', credentials:true}));
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -29,7 +29,7 @@ app.use(cookieParser());
 // app.use(fileUpload());
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", '*');
+  res.header("Access-Control-Allow-Origin", 'https://g-16-sms.netlify.app');
   res.header('Access-Control-Allow-Credentials', true)
   res.header(
     "Access-Control-Allow-Headers",
