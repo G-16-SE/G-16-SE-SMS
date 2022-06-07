@@ -23,8 +23,8 @@ const insertRecord = async (req) => {
     "join_date",
     req.body.user_id,
     req.body.name,
-    req.body.contactno,
-    req.body.joineddate,
+    req.body.contact,
+    req.body.join_date,
   ];
 
   let res = await insertWithTransaction(sql1, sql2, params1, params2);
@@ -37,7 +37,7 @@ const updateRecord = async (req) => {
   params1 = [];
   params2 = [];
 
-  if (req.body.password != "") {
+  if (req.body.password == "") {
     sql1 = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
     params1 = ["user", "email", req.body.email, "id", req.body.user_id];
 
@@ -47,9 +47,11 @@ const updateRecord = async (req) => {
       "name",
       req.body.name,
       "contact",
-      req.body.contactno,
+      req.body.contact,
       "join_date",
-      req.body.joineddate,
+      req.body.join_date,
+      "user_id",
+      req.body.user_id
     ];
   } else {
     sql1 = "UPDATE ?? SET ?? = ? , ?? = ? WHERE ?? = ?";
@@ -58,7 +60,7 @@ const updateRecord = async (req) => {
       "email",
       req.body.email,
       "password",
-      req.body.password,
+      req.body.hashPassword,
       "id",
       req.body.user_id,
     ];
@@ -69,9 +71,11 @@ const updateRecord = async (req) => {
       "name",
       req.body.name,
       "contact",
-      req.body.contactno,
+      req.body.contact,
       "join_date",
-      req.body.joineddate,
+      req.body.join_date,
+      "user_id",
+      req.body.user_id
     ];
   }
 
@@ -79,7 +83,31 @@ const updateRecord = async (req) => {
   return res;
 };
 
+const findById = async (id) => {
+  sql = "SELECT ??.* , ??.?? FROM ?? INNER JOIN ?? ON ??.?? = ??.?? WHERE ??.?? = ?";
+  params = ["manager" , "user" , "email" ,"manager" , "user" , "user" , "id" , "manager", "user_id" , "manager" , "id" , id];
+  const res = await select(sql, params);
+  return res;
+};
+
+const findAll = async () => {
+  sql = "SELECT ??.* , ??.?? FROM ?? INNER JOIN ?? ON ??.?? = ??.??";
+  params = ["manager" , "user" , "email" ,"manager" , "user" , "user" , "id" , "manager", "user_id"];
+  const res = await select(sql, params);
+  return res;
+};
+
+const findByUserId = async (user_id) => {
+  sql = "SELECT ??.* , ??.?? FROM ?? INNER JOIN ?? ON ??.?? = ??.?? WHERE ??.?? = ?";
+  params = ["manager" , "user" , "email" ,"manager" , "user" , "user" , "id" , "manager", "user_id" , "manager" , "user_id" , user_id];
+  const res = await select(sql, params);
+  return res;
+};
+
 module.exports = {
   insertRecord,
   updateRecord,
+  findById,
+  findAll,
+  findByUserId
 };

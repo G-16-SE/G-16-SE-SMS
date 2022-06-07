@@ -9,19 +9,22 @@ const Manager = require("../services/database/Manager");
 
 exports.manager_signup = async (req, res, next) => {
 
-  if(req.role !== "Admin"){
-    return res.status(401).json({
-      message: "Access Denied"
-    })
-  }
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
 
   const validation_result = validator.manager_signup(req);
 
   if (validation_result.status) {
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
+
 
   let result_email = await User.findByEmail(req.body.email);
 
@@ -32,9 +35,10 @@ exports.manager_signup = async (req, res, next) => {
   }
 
   if (result_email.values.length < 1) {
+    req.body.password = "123456789";
     bcrypt.hash(req.body.password, 10, async (err, hash) => {
       if (err) {
-        return res.status(500).json({
+        return res.status(400).json({
           message: err,
         });
       } else {
@@ -61,11 +65,82 @@ exports.manager_signup = async (req, res, next) => {
       }
     });
   } else {
-    return res.status(500).json({
+    return res.status(400).json({
       message: "Email already exist",
     });
   }
 };
+
+exports.manager_update = async (req, res, next) => {
+
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
+  
+  const validation_result = validator.manager_update(req);
+
+  if (validation_result.status) {
+    return res.status(400).json({
+      message: validation_result.message,
+    });
+  }
+
+  let result_email = await User.findByEmail(req.body.email);
+
+  if (!result_email.status) {
+    return res.status(502).json({
+      message: "Email find failed",
+    });
+  }
+
+  let result_manager = await Manager.findById(req.body.id);
+
+  if (!result_manager.status) {
+    return res.status(502).json({
+      message: "Manager find failed",
+    });
+  }
+
+  if(result_manager.values.length < 1){
+    return res.status(400).json({
+      message: "Manager not exist",
+    });
+  }
+
+  const email_condition =
+    (result_email.values.length > 0 &&
+      result_manager.values[0].email == req.body.email) ||
+    result_email.values.length < 1;
+
+  if (email_condition) {
+    try {
+      req.body.user_id = result_manager.values[0].user_id;
+      let update_result = await Manager.updateRecord(req);
+      if (update_result.status) {
+        return res.status(201).json({
+          message: "Updation Success!",
+        });
+      } else {
+        return res.status(500).json({
+          message: "Updation Failed",
+        });
+      }
+    } catch (err) {
+      return res.status(500).json({
+        message: err,
+      });
+    }
+  } else {
+    return res.status(400).json({
+      message: "Email already exist",
+    });
+  }
+};
+
 
 exports.admin_signup = async (req, res, next) => {
 
@@ -73,7 +148,7 @@ exports.admin_signup = async (req, res, next) => {
   const validation_result = validator.admin_signup(req);
 
   if (validation_result.status) {
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -89,7 +164,7 @@ exports.admin_signup = async (req, res, next) => {
   if (result_email.values.length < 1) {
     bcrypt.hash(req.body.password, 10, async (err, hash) => {
       if (err) {
-        return res.status(500).json({
+        return res.status(400).json({
           message: err.message,
         });
       } else {
@@ -116,7 +191,7 @@ exports.admin_signup = async (req, res, next) => {
       }
     });
   } else {
-    return res.status(500).json({
+    return res.status(400).json({
       message: "Email already exist",
     });
   }
@@ -126,7 +201,7 @@ exports.user_login = async (req, res, next) => {
   const validation_result = validator.login(req);
 
   if (validation_result.status) {
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -135,7 +210,7 @@ exports.user_login = async (req, res, next) => {
 
   if (!result_email.status) {
     return res.status(502).json({
-      message: "DB error",
+      message: "User find failed",
     });
   }
 
@@ -143,7 +218,7 @@ exports.user_login = async (req, res, next) => {
     user = result_email.values[0];
     bcrypt.compare(req.body.password, user.password, async (err, result) => {
       if (err) {
-        return res.status(401).json({
+        return res.status(400).json({
           message: "Auth failed",
         });
       }
@@ -168,7 +243,7 @@ exports.user_login = async (req, res, next) => {
           },
           process.env.REFRESH_TOKEN_KEY,
           {
-            expiresIn: "6h", // 6 hours
+            expiresIn: "3000000s", 
           }
         );
 
@@ -181,28 +256,32 @@ exports.user_login = async (req, res, next) => {
           res.cookie("accesstoken", accesstoken, {
             maxAge: 900000,
             httpOnly: true,
+            sameSite: 'none',
+            secure: true,
           });
           res.cookie("refreshtoken", refreshtoekn, {
             maxAge: 900000,
             httpOnly: true,
+            sameSite: 'none',
+            secure: true,
           });
 
           return res.status(200).json({
             message: "Login successful",
-            accesstoken: accesstoken,
+            role: user.role
           });
         } else {
-          return res.status(401).json({
+          return res.status(500).json({
             message: "token update error",
           });
         }
       }
-      return res.status(401).json({
+      return res.status(400).json({
         message: "Password is not matching",
       });
     });
   } else {
-    return res.status(500).json({
+    return res.status(400).json({
       message: "User not exist",
     });
   }
@@ -212,7 +291,9 @@ exports.manager_delete = async (req, res, next) => {
 
   // if(req.role !== "Admin"){
   //   return res.status(401).json({
-  //     message: "Access Denied"
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
   //   })
   // }
 
@@ -232,19 +313,68 @@ exports.manager_delete = async (req, res, next) => {
         });
       } else {
         return res.status(502).json({
-          message: "DB error",
+          message: "Deletion failed",
         });
       }
     } else {
-      return res.status(401).json({
+      return res.status(400).json({
         message: "Manager not found",
       });
     }
   } else {
     return res.status(502).json({
-      message: "DB error",
+      message: "Manager find failed",
     });
   }
+};
+
+exports.managers_delete = async (req, res, next) => {
+
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
+  //   })
+  // }
+
+  if(req.body){
+    req.body.forEach( async (row)=> {
+      let result_manager = await Manager.findById(row.id);
+
+      if(!result_manager.status){
+        return res.status(500).json({
+          message: "Search Failed for id "+ row.id,
+        });
+      }
+
+      if(result_manager.values.length < 1){
+        return res.status(400).json({
+          message: "Manager not found for id "+ row.id,
+        })
+      }
+  
+      let result_delete = await User.deleteRecord(
+        result_manager.values[0].user_id
+      );
+
+      if(!result_delete.status){
+        return res.status(500).json({
+          message: "Delete Failed for id "+ row.id,
+        });
+      }
+
+    })
+
+    return res.status(201).json({
+      message: "Delete Success!",
+    });
+  }else {
+    return res.status(400).json({
+      message: "Empty input for deletion",
+    })
+  }
+
 };
 
 exports.user_logout = (req, res, next) => {
@@ -254,6 +384,32 @@ exports.user_logout = (req, res, next) => {
   return res.status(200).json({
     message: "logout success!",
   });
+};
+
+exports.get_managers = async (req, res, next) => {
+
+  // if(req.role !== "Admin"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
+
+  let result_search = await Manager.findAll();
+
+  if(!result_search.status){
+    return res.status(500).json({
+      message: "Search Failed",
+    });
+  }
+
+
+  console.log(result_search.values);
+  return res.status(201).json({
+    message: "Search Success!",
+    data: result_search.values
+  });
+
+
 };
 
 function generateUniqueID() {

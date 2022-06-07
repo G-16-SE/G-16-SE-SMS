@@ -2,22 +2,26 @@ const validator = require("../validation/user_inputs");
 
 const SupplyRecord = require("../services/database/SupplyRecord");
 const Storage = require("../services/database/Storage");
+const Supplier = require("../services/database/Supplier");
 
 exports.addSupplyRecord = async(req, res , next) => {
   // if(req.role !== "Manager"){
   //   return res.status(401).json({
-  //     message: "Access Denied"
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
   //   })
   // }
 
   const validation_result = validator.supplyrecord_insert(req);
 
   if(validation_result.status){
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
 
+  // console.log(req.body)
   let result_supplier = await Supplier.findById(req.body.sup_ID);
 
   if(!result_supplier.status){
@@ -27,7 +31,7 @@ exports.addSupplyRecord = async(req, res , next) => {
   }
 
   if(result_supplier.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supplier not found",
     });
   }
@@ -55,17 +59,8 @@ exports.addSupplyRecord = async(req, res , next) => {
     });
 
   }else {
-    req.body.stock_amount = req.body.amount;
-    let result_supplyrecord = await SupplyRecord.insertRecordWithNewType(req);
-
-    if(!result_supplyrecord.status){
-      return res.status(500).json({
-        message: "Insertion Failed",
-      });
-    }
-
-    return res.status(201).json({
-      message: "Insertion Success!",
+    return res.status(400).json({
+      message: "Type not exist",
     });
   }
 
@@ -74,7 +69,9 @@ exports.addSupplyRecord = async(req, res , next) => {
 exports.getSupplyRecordBySupID = async(req, res) => {
   // if(req.role !== "Manager"){
   //   return res.status(401).json({
-  //     message: "Access Denied"
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
   //   })
   // }
 
@@ -87,7 +84,7 @@ exports.getSupplyRecordBySupID = async(req, res) => {
   }
 
   if(result_supplier.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supplier not found",
     });
   }
@@ -110,7 +107,9 @@ exports.getSupplyRecordBySupID = async(req, res) => {
 exports.getSupplyRecords = async(req, res) => {
   // if(req.role !== "Manager"){
   //   return res.status(401).json({
-  //     message: "Access Denied"
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
   //   })
   // }
 
@@ -131,7 +130,9 @@ exports.getSupplyRecords = async(req, res) => {
 exports.deleteSupplyRecordrByID = async(req, res) => {
   // if(req.role !== "Manager"){
   //   return res.status(401).json({
-  //     message: "Access Denied"
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
   //   })
   // }
 
@@ -144,7 +145,7 @@ exports.deleteSupplyRecordrByID = async(req, res) => {
   }
 
   if(result_supplyrecord.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supply record not found",
     });
   }
@@ -158,7 +159,7 @@ exports.deleteSupplyRecordrByID = async(req, res) => {
   }
 
   if(result_type.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Storage type not found",
     });
   }
@@ -182,14 +183,17 @@ exports.deleteSupplyRecordrByID = async(req, res) => {
 exports.editSupplyRecord = async(req, res) => {
   // if(req.role !== "Manager"){
   //   return res.status(401).json({
-  //     message: "Access Denied"
+  //     message: "Access Denied",
+  //     access : false,
+  //     auth : true
   //   })
   // }
+
 
   const validation_result = validator.supplyrecord_update(req);
 
   if(validation_result.status){
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -202,14 +206,14 @@ exports.editSupplyRecord = async(req, res) => {
     });
   }
   if(result_supplyrecord.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supply record not found",
     });
   }
 
   req.body.id = req.params.id;
 
-  let result_supplier = await Supplier.findById(req.body.sup_ID);
+  let result_supplier = await Supplier.findById(req.body.supplier_id);
 
   if(!result_supplier.status){
     return res.status(500).json({
@@ -218,7 +222,7 @@ exports.editSupplyRecord = async(req, res) => {
   }
 
   if(result_supplier.values.length < 1){
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Supplier not found",
     });
   }
@@ -246,12 +250,12 @@ exports.editSupplyRecord = async(req, res) => {
     });
 
   }else {
-    // type can't be change
-
-    return res.status(401).json({
-      message: "Type cannot be changed",
+    return res.status(400).json({
+      message: "Type not exist",
     });
-
-    
   }
 };
+
+const dateFormate = (date) => {
+  return date.split("T")[0];
+}

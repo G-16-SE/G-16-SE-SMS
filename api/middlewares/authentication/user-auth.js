@@ -3,7 +3,6 @@ const User = require("../../services/database/User");
 
 module.exports = async (req, res, next) => {
   try {
-    console.log(req.cookies);
     const accesstoken = req.cookies.accesstoken;
     const refreshtoken = req.cookies.refreshtoken;
 
@@ -19,10 +18,12 @@ module.exports = async (req, res, next) => {
                 process.env.REFRESH_TOKEN_KEY,
                 async (err, decodedrefreshtoken) => {
                   if (err) {
-                    console.error(err.message);
+                    console.error(err.message , "111111111111");
                     return res.status(401).json({
                       message: "Auth failed",
-                    });
+                      access : false,
+                      auth : false
+                    })
                   } else {
                     let result_user = await User.findById(
                       decodedrefreshtoken.userId
@@ -36,7 +37,8 @@ module.exports = async (req, res, next) => {
                           result_user.values[0].token,
                           "base64"
                         ).toString("ascii");
-                        if (savedrefreshtoken == refreshtoken) {
+                        //const savedrefreshtoken = result_user.values[0].token;
+                        if (savedrefreshtoken === req.cookies.refreshtoken) {
                           const user = result_user.values[0];
 
                           const newaccesstoken = jwt.sign(
@@ -59,12 +61,12 @@ module.exports = async (req, res, next) => {
                             },
                             process.env.REFRESH_TOKEN_KEY,
                             {
-                              expiresIn: "6h", // 6 hours
+                              expiresIn: "300000s", 
                             }
                           );
 
                           let refreshtokenbuff = new Buffer.from(
-                            refreshtoekn,
+                            newrefreshtoekn,
                             "utf8"
                           );
                           let encodetoken = refreshtokenbuff.toString("base64");
@@ -78,10 +80,14 @@ module.exports = async (req, res, next) => {
                             res.cookie("accesstoken", newaccesstoken, {
                               maxAge: 900000,
                               httpOnly: true,
+                              sameSite: 'none',
+                              secure: true,
                             });
                             res.cookie("refreshtoken", newrefreshtoekn, {
                               maxAge: 900000,
                               httpOnly: true,
+                              sameSite: 'none',
+                              secure: true,
                             });
 
                             req.user_id = user.id;
@@ -89,34 +95,46 @@ module.exports = async (req, res, next) => {
 
                             next();
                           } else {
-                            return res.status(401).json({
+                            return res.status(500).json({
                               message: "token update error",
                             });
                           }
                         } else {
+                          // console.log("222222222222")
                           return res.status(401).json({
-                            message: "User not found",
-                          });
+                            message: "Auth failed",
+                            access : false,
+                            auth : false
+                          })
                         }
                       } else {
+                        // console.log("2");
                         return res.status(401).json({
                           message: "User not found",
-                        });
+                          access : false,
+                          auth : false
+                        })
                       }
                     } else {
-                      return res.status(502).json({
-                        message: "DB error",
-                      });
+                      return res.status(401).json({
+                        message: "DB Error",
+                        access : false,
+                        auth : false
+                      })
                     }
                   }
                 }
               );
             } else {
+              // console.log("33333333333")
               return res.status(401).json({
                 message: "Auth failed",
-              });
+                access : false,
+                auth : false
+              })
             }
           } else {
+            
             req.user_id = decodedaccesstoken.userId;
             req.role = decodedaccesstoken.role;
             next();
@@ -133,7 +151,9 @@ module.exports = async (req, res, next) => {
               console.error(err.message);
               return res.status(401).json({
                 message: "Auth failed",
-              });
+                access : false,
+                auth : false
+              })
             } else {
               let result_user = await User.findById(decodedrefreshtoken.userId);
               if (result_user.status) {
@@ -145,7 +165,8 @@ module.exports = async (req, res, next) => {
                     result_user.values[0].token,
                     "base64"
                   ).toString("ascii");
-                  if (savedrefreshtoken == refreshtoken) {
+                  //const savedrefreshtoken = result_user.values[0].token;
+                  if (savedrefreshtoken === req.cookies.refreshtoken) {
                     const user = result_user.values[0];
 
                     const newaccesstoken = jwt.sign(
@@ -168,7 +189,7 @@ module.exports = async (req, res, next) => {
                       },
                       process.env.REFRESH_TOKEN_KEY,
                       {
-                        expiresIn: "6h", // 6 hours
+                        expiresIn: "300000s",
                       }
                     );
 
@@ -184,10 +205,14 @@ module.exports = async (req, res, next) => {
                       res.cookie("accesstoken", newaccesstoken, {
                         maxAge: 900000,
                         httpOnly: true,
+                        sameSite: 'none',
+                        secure: true,
                       });
                       res.cookie("refreshtoken", newrefreshtoekn, {
                         maxAge: 900000,
                         httpOnly: true,
+                        sameSite: 'none',
+                        secure: true,
                       });
 
                       req.user_id = user.id;
@@ -197,36 +222,49 @@ module.exports = async (req, res, next) => {
                     } else {
                       return res.status(401).json({
                         message: "token update error",
-                      });
+                        access : false,
+                        auth : false
+                      })
                     }
                   } else {
                     return res.status(401).json({
                       message: "User not found",
-                    });
+                      access : false,
+                      auth : false
+                    })
                   }
                 } else {
                   return res.status(401).json({
                     message: "User not found",
-                  });
+                    access : false,
+                    auth : false
+                  })
                 }
               } else {
-                return res.status(502).json({
+                return res.status(401).json({
                   message: "DB error",
-                });
+                  access : false,
+                  auth : false
+                })
               }
             }
           }
         );
       } else {
+        // console.log("55555555555555")
         return res.status(401).json({
           message: "Auth failed",
-        });
+          access : false,
+          auth : false
+        })
       }
     }
   } catch (error) {
     console.error(error.message);
     return res.status(401).json({
       message: "Auth failed",
-    });
+      access : false,
+      auth : false
+    })
   }
 };

@@ -23,7 +23,9 @@ const insertRecordWithExistType = async (req) => {
       "stock_amount",
       req.body.stock_amount,
       "last_refilled_date",
-      new Date()
+      getCurrentDate(),
+      "type",
+      req.body.type
     ];
   
     let res = await insertWithTransaction(sql1 , sql2, params1 , params2);
@@ -55,7 +57,7 @@ const insertRecordWithNewType = async (req) => {
     "last_refilled_date",
     req.body.type,
     req.body.stock_amount,
-    new Date()
+    getCurrentDate()
   ];
 
   let res = await insertWithTransaction(sql1 , sql2, params1 , params2);
@@ -64,17 +66,15 @@ const insertRecordWithNewType = async (req) => {
 
 const updateRecordWithExistType = async (req) => {
 
-  sql1 = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
+  sql1 = "UPDATE ?? SET ?? = ? , ?? = ? , ?? = ? , ?? = ? WHERE ?? = ?";
   params1 = [
       "supply_record",
-      "supplier_id",
-      req.body.sup_ID,
       "unit_prize",
       req.body.unit_prize,
       "amount",
       req.body.amount,
-      "type",
-      req.body.type,
+      "availability",
+      req.body.availability,
       "received_date",
       req.body.received_date,
       "id",
@@ -87,12 +87,15 @@ const updateRecordWithExistType = async (req) => {
     "stock_amount",
     req.body.stock_amount,
     "last_refilled_date",
-    new Date()
+    getCurrentDate(),
+    "type",
+    req.body.type
   ];
 
   let res = await updateWithTransaction(sql1 , sql2, params1 , params2);
   return res;
 };
+
 
 const updateRecordWithNewType = async (req) => {
 
@@ -121,7 +124,7 @@ const updateRecordWithNewType = async (req) => {
     "last_refilled_date",
     req.body.type,
     req.body.stock_amount,
-    new Date()
+    getCurrentDate()
   ];
 
   let res = await updateWithTransaction(sql1 , sql2, params1 , params2);
@@ -139,7 +142,9 @@ const deleteRecord = async (req) => {
       "stock_amount",
       req.body.stock_amount,
       "last_refilled_date",
-      new Date()
+      getCurrentDate(),
+      "type",
+      req.body.type,
     ];
 
     const res = await removeWithTransaction(sql1 , sql2, params1 , params2);
@@ -153,12 +158,30 @@ const findBySupplierId = async (supID) => {
   return res;
 };
 
+const findById = async (id) => {
+  sql = "SELECT * FROM ?? WHERE ?? = ?";
+  params = ["supply_record", "id", id];
+  const res = await select(sql, params);
+  return res;
+};
+
 const findAll = async () => {
   sql = "SELECT * FROM ??";
   params = ["supply_record"];
   const res = await select(sql, params);
   return res;
 };
+
+const getCurrentDate = () => {
+  var date_ob = new Date();
+  var day = ("0" + date_ob.getDate()).slice(-2);
+  var month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+  var year = date_ob.getFullYear();
+    
+  var date = year + "-" + month + "-" + day;
+
+  return date;
+}
 
 module.exports = {
   insertRecordWithExistType,
@@ -167,5 +190,6 @@ module.exports = {
   updateRecordWithNewType,
   deleteRecord,
   findBySupplierId,
-  findAll
+  findAll,
+  findById
 };

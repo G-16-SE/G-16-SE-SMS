@@ -9,16 +9,10 @@ const Manager = require("../services/database/Manager");
 
 exports.manager_update = async (req, res, next) => {
 
-  // if(req.role !== "Manager"){
-  //   return res.status(401).json({
-  //     message: "Access Denied"
-  //   })
-  // }
-  
-  validation_result = validator.manager_uodate(req);
+  const validation_result = validator.manager_update(req);
 
   if (validation_result.status) {
-    return res.status(401).json({
+    return res.status(400).json({
       message: validation_result.message,
     });
   }
@@ -27,28 +21,45 @@ exports.manager_update = async (req, res, next) => {
 
   if (!result_email.status) {
     return res.status(502).json({
-      message: "DB error",
+      message: "Email find failed",
+    });
+  }
+
+  let result_manager = await Manager.findById(req.body.id);
+
+  if (!result_manager.status) {
+    return res.status(502).json({
+      message: "Manager find failed",
+    });
+  }
+
+  if(result_manager.values.length < 1){
+    return res.status(400).json({
+      message: "Manager not exist",
     });
   }
 
   const email_condition =
     (result_email.values.length > 0 &&
-      result_email.values[0].id == req.user.id) ||
+      result_manager.values[0].email == req.body.email) ||
     result_email.values.length < 1;
 
+  console.log(result_email.values, result_manager.values,
+      req.body.email, email_condition)
+
   if (email_condition) {
-    if (req.body.password != "") {
+    if (req.body.password && req.body.password != "") {
       bcrypt.hash(req.body.password, 10, async (err, hash) => {
         if (err) {
           return res.status(500).json({
-            message: err,
+            message: err.message,
           });
         } else {
           try {
-            req.body.user_id = result_email.values[0].user_id;
+            req.body.user_id = result_manager.values[0].user_id;
             req.body.hashPassword = hash;
-            let insert_result = await Manager.insertRecord(req);
-            if (insert_result.status) {
+            let update_result = await Manager.updateRecord(req);
+            if (update_result.status) {
               return res.status(201).json({
                 message: "Updation Success!",
               });
@@ -66,10 +77,10 @@ exports.manager_update = async (req, res, next) => {
       });
     } else {
       try {
-        req.body.user_id = result_email.values[0].user_id;
-        req.body.user_id = user_id;
-        let insert_result = await Manager.updateRecord(req);
-        if (insert_result.status) {
+        req.body.user_id = result_manager.values[0].user_id;
+        if(!req.body.password) req.body.password = "";
+        let update_result = await Manager.updateRecord(req);
+        if (update_result.status) {
           return res.status(201).json({
             message: "Updation Success!",
           });
@@ -85,8 +96,28 @@ exports.manager_update = async (req, res, next) => {
       }
     }
   } else {
-    return res.status(500).json({
+    return res.status(400).json({
       message: "Email already exist",
     });
   }
+};
+
+exports.get_manager = async (req, res, next) => {
+  // if(req.role !== "Manager"){
+  //   return res.status(401).json({
+  //     message: "Access Denied"
+  //   })
+  // }
+  let result_search = await Manager.findByUserId(req.user_id);
+
+  if(!result_search.status){
+    return res.status(500).json({
+      message: "Search Failed",
+    });
+  }
+
+  return res.status(201).json({
+    message: "Search Success!",
+    data: result_search.values
+  });
 };
