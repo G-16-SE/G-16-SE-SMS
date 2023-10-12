@@ -19,7 +19,6 @@ const { supplierRouter } = require("./api/routes/supplier");
 const { supplyRecordRouter } = require("./api/routes/supplyRecord");
 const { storageRouter } = require("./api/routes/storage");
 const { goodRouter } = require("./api/routes/good");
-const { clearScreenDown } = require("readline");
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.static('public'));
